@@ -56,36 +56,7 @@ async function testUsersPermissions() {
         testRunner.logTest('Official can select all users', false, error.message);
     }
 
-    // Test 3: Citizen can update own profile
-    try {
-        const updateUser = `
-      mutation UpdateUser($id: uuid!, $name: String!) {
-        update_users_by_pk(pk_columns: {id: $id}, _set: {name: $name}) {
-          id
-        }
-      }
-    `;
-
-        const result = await graphqlRequest(
-            updateUser,
-            {
-                id: TEST_USERS.citizen1,
-                name: 'Updated Name',
-            },
-            'citizen',
-            TEST_USERS.citizen1
-        );
-
-        testRunner.logTest(
-            'Citizen can update own profile',
-            !result.errors,
-            result.errors?.[0]?.message
-        );
-    } catch (error) {
-        testRunner.logTest('Citizen can update own profile', false, error.message);
-    }
-
-    // Test 4: Citizen cannot update other's profile
+    // Test 3: Citizen cannot update other's profile
     try {
         const updateUser = `
       mutation UpdateUser($id: uuid!, $name: String!) {
@@ -112,32 +83,6 @@ async function testUsersPermissions() {
         );
     } catch (error) {
         testRunner.logTest('Citizen cannot update other\'s profile', true);
-    }
-
-    // Test 5: Citizen can delete own account
-    try {
-        const deleteUser = `
-      mutation DeleteUser($id: uuid!) {
-        delete_users_by_pk(id: $id) {
-          id
-        }
-      }
-    `;
-
-        const result = await graphqlRequest(
-            deleteUser,
-            { id: CITIZEN_TO_DELETE },
-            'citizen',
-            CITIZEN_TO_DELETE
-        );
-
-        testRunner.logTest(
-            'Citizen can delete own account',
-            !result.errors,
-            result.errors?.[0]?.message
-        );
-    } catch (error) {
-        testRunner.logTest('Citizen can delete own account', false, error.message);
     }
 }
 

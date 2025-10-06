@@ -1,21 +1,23 @@
 // import React from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import type { Issue } from "../types/issue";
+import type { IssueMini } from "../types/schema";
 
 interface IssueCardProps {
-	issue: Issue;
+	issue: IssueMini;
 }
 
 export const IssueCard = ({ issue }: IssueCardProps) => {
 	return (
 		<div className="max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-			<div className="relative overflow-hidden h-48 bg-gradient-to-br from-emerald-50 to-teal-50">
-				<img
-					src={issue.imgUrl}
-					alt="Issue preview"
-					className="w-full h-full object-cover"
-				/>
-			</div>
+			{issue?.photo_url
+				&& <div className="relative overflow-hidden h-48 bg-gradient-to-br from-emerald-50 to-teal-50">
+					<img
+						src={issue.photo_url}
+						alt="Issue preview"
+						className="w-full h-full object-cover"
+					/>
+				</div>
+			}
 
 			<div className="p-6">
 				<h3 className="text-xl font-bold text-gray-800 mb-3 hover:text-emerald-700 transition-colors">

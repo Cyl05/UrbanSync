@@ -5,9 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/index.ts";
 import { ApolloProvider } from "@apollo/client/react";
-import client from "./lib/client.ts";
+import { createApolloClient } from "./lib/client.ts";
 import 'leaflet/dist/leaflet.css';
 import './index.css';
+
+const client = createApolloClient();
 
 createRoot(document.getElementById("root")!).render(
     <BrowserRouter>

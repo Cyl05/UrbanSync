@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaMapMarkerAlt, FaSignOutAlt, FaList, FaMap, FaBell, FaCog } from 'react-icons/fa';
+import { supabase } from '../lib/supabaseClient';
 
 const Dashboard: React.FC = () => {
   // This would typically get user data from context or props
@@ -9,6 +10,14 @@ const Dashboard: React.FC = () => {
     role: 'official' as const,
     email: 'john.doe@city.gov'
   };
+
+  useEffect(() => {
+    async function test () {
+      const session = await supabase.auth.getSession();
+      console.log(session);
+    }
+    test();
+  }, []);
 
   const mockStats = {
     totalIssues: 47,

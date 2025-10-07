@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/index.ts";
 import { ApolloProvider } from "@apollo/client/react";
-import client from "./api/client.ts";
+import client from "./lib/client.ts";
 import 'leaflet/dist/leaflet.css';
 import './index.css';
 

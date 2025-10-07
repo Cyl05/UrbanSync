@@ -8,10 +8,10 @@ import {
 	FaUserPlus,
 } from "react-icons/fa";
 import type { UserRole } from "../types/schema";
+import { supabase } from "../lib/supabaseClient";
 
 const Register: React.FC = () => {
 	const [formData, setFormData] = useState({
-		name: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
@@ -42,12 +42,6 @@ const Register: React.FC = () => {
 	const validateForm = () => {
 		const newErrors: { [key: string]: string } = {};
 
-		if (!formData.name.trim()) {
-			newErrors.name = "Full name is required";
-		} else if (formData.name.trim().length < 2) {
-			newErrors.name = "Name must be at least 2 characters long";
-		}
-
 		if (!formData.email) {
 			newErrors.email = "Email is required";
 		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -74,6 +68,7 @@ const Register: React.FC = () => {
 		e.preventDefault();
 
 		if (!validateForm()) {
+			console.log("invalid form");
 			return;
 		}
 
@@ -85,6 +80,17 @@ const Register: React.FC = () => {
 				password: "[REDACTED]",
 				confirmPassword: "[REDACTED]",
 			});
+
+			const { data, error } = await supabase.auth.signUp({
+				email: formData.email,
+				password: formData.password,
+			});
+
+			console.log(data);
+
+			if (error) {
+				throw Error(`Registeration failed - Status Code: ${error.code}`);
+			}
 
 			window.location.href = "/login";
 		} catch (error) {

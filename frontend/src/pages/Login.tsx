@@ -7,6 +7,7 @@ import {
 	FaLock,
 	FaSignInAlt,
 } from "react-icons/fa";
+import { supabase } from "../lib/supabaseClient";
 
 const Login: React.FC = () => {
 	const [formData, setFormData] = useState({
@@ -61,7 +62,14 @@ const Login: React.FC = () => {
 		try {
 			console.log("Login attempt:", formData);
 
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			const { data } = await supabase.auth.signInWithPassword({ 
+				email: formData.email, 
+				password: formData.password
+			});
+
+			const token = data.session?.access_token;
+
+			console.log(token);
 
 			window.location.href = "/dashboard";
 		} catch (error) {

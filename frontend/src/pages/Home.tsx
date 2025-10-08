@@ -2,7 +2,7 @@
 
 import Map from "../features/Map";
 
-const Home = () => {
+const Home: React.FC = () => {
     return (
         <Map />
     );

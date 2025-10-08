@@ -75,15 +75,15 @@ const Dashboard: React.FC = () => {
 									{user.role}
 								</p>
 							</div>
-							<button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+							<button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors cursor-pointer">
 								<FaBell className="h-5 w-5" />
 							</button>
-							<button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+							<button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors cursor-pointer">
 								<FaCog className="h-5 w-5" />
 							</button>
 							<button
 								onClick={handleSignOut}
-								className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+								className="flex items-center space-x-2 text-sm text-red-600 hover:bg-red-100 px-3 py-2 rounded-md transition-colors cursor-pointer"
 							>
 								<FaSignOutAlt className="h-4 w-4" />
 								<span>Sign Out</span>

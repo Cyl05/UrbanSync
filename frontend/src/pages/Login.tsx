@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
 	FaEye,
 	FaEyeSlash,
@@ -8,8 +8,12 @@ import {
 	FaSignInAlt,
 } from "react-icons/fa";
 import { supabase } from "../lib/supabaseClient";
+import { useAppDispatch } from "../store/hooks";
+import { fetchUser } from "../store/userSlice";
 
 const Login: React.FC = () => {
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -60,18 +64,21 @@ const Login: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			console.log("Login attempt:", formData);
-
-			const { data } = await supabase.auth.signInWithPassword({ 
+			const { data, error: authError } = await supabase.auth.signInWithPassword({ 
 				email: formData.email, 
 				password: formData.password
 			});
 
-			const token = data.session?.access_token;
+			if (authError) {
+				throw authError;
+			}
 
-			console.log(token);
-
-			window.location.href = "/dashboard";
+			const userId = data.session?.user.id;
+			
+			if (userId) {
+				await dispatch(fetchUser(userId)).unwrap();
+				navigate("/dashboard");
+			}
 		} catch (error) {
 			console.error("Login error:", error);
 			setErrors({

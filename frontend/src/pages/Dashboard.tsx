@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
 	FaMapMarkerAlt,
@@ -9,35 +9,27 @@ import {
 	FaCog,
 } from "react-icons/fa";
 import { supabase } from "../lib/supabaseClient";
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
 import LoadingScreen from "../components/LoadingScreen";
-
-const GET_USER = gql`
-	query getUser($id: uuid!) {
-		users(where: {id: {_eq: $id}}) {
-			id
-			email
-			name
-			role
-			created_at
-		}
-	}
-`;
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchUser, clearUser } from "../store/userSlice";
 
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
-	const [userId, setUserId] = useState<string | undefined>();
+	const dispatch = useAppDispatch();
+	const { currentUser: user, loading, error } = useAppSelector((state) => state.user);
 
 	useEffect(() => {
-		const getAccessToken = async () => {
+		const getUserAndFetch = async () => {
 			const session = await supabase.auth.getSession();
 			const userId = session.data?.session?.user.id;
-			setUserId(userId);
-		}
+			
+			if (userId) {
+				dispatch(fetchUser(userId));
+			}
+		};
 
-		getAccessToken();
-	}, []);
+		getUserAndFetch();
+	}, [dispatch]);
 
 	const handleSignOut = async () => {
 		try {
@@ -46,19 +38,12 @@ const Dashboard: React.FC = () => {
 				console.error("Error signing out:", error.message);
 				return;
 			}
-			// Redirect to home page after successful sign out
+			dispatch(clearUser());
 			navigate("/");
 		} catch (err) {
 			console.error("Unexpected error during sign out:", err);
 		}
 	};
-
-	const { data, loading, error } = useQuery(GET_USER, {
-		variables: { id: userId },
-		skip: !userId, 
-	});
-
-	const user = data?.users?.[0];
 
 	if (loading) {
 		return (
@@ -72,7 +57,7 @@ const Dashboard: React.FC = () => {
 			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
 				<div className="text-center">
 					<p className="text-red-600">Error loading user data</p>
-					<p className="text-sm text-gray-600 mt-2">{error.message}</p>
+					<p className="text-sm text-gray-600 mt-2">{error}</p>
 				</div>
 			</div>
 		);
@@ -97,11 +82,9 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			{/* Navigation Header */}
 			<nav className="bg-white shadow-sm border-b border-gray-200">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex justify-between items-center h-16">
-						{/* Logo */}
 						<div className="flex items-center space-x-3">
 							<FaMapMarkerAlt className="h-8 w-8 text-indigo-600" />
 							<div>
@@ -114,7 +97,6 @@ const Dashboard: React.FC = () => {
 							</div>
 						</div>
 
-						{/* User Menu */}
 						<div className="flex items-center space-x-4">
 							<div className="hidden md:block">
 								<p className="text-sm font-medium text-gray-700">
@@ -142,9 +124,7 @@ const Dashboard: React.FC = () => {
 				</div>
 			</nav>
 
-			{/* Main Content */}
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-				{/* Welcome Section */}
 				<div className="mb-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-2">
 						Welcome back, {user.name}
@@ -154,7 +134,6 @@ const Dashboard: React.FC = () => {
 					</p>
 				</div>
 
-				{/* Stats Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 					<div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
 						<div className="flex items-center justify-between">
@@ -221,9 +200,7 @@ const Dashboard: React.FC = () => {
 					</div>
 				</div>
 
-				{/* Quick Actions */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					{/* Map View */}
 					<div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
 						<div className="p-6">
 							<div className="flex items-center justify-between mb-4">
@@ -266,7 +243,6 @@ const Dashboard: React.FC = () => {
 						</div>
 					</div>
 
-					{/* Recent Activity */}
 					<div className="bg-white rounded-lg shadow-sm border border-gray-200">
 						<div className="p-6">
 							<h3 className="text-lg font-semibold text-gray-900 mb-4">

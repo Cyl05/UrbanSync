@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import type { UserRole } from "../types/schema";
 import { supabase } from "../lib/supabaseClient";
+import WideButton from "../components/WIdeButton";
 
 const Register: React.FC = () => {
 	const [formData, setFormData] = useState({
@@ -279,53 +280,7 @@ const Register: React.FC = () => {
 							)}
 						</div>
 
-						<div className="flex items-start">
-							<div className="flex items-center h-5">
-								<input
-									id="terms"
-									name="terms"
-									type="checkbox"
-									required
-									className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-								/>
-							</div>
-							<div className="ml-3 text-sm">
-								<label
-									htmlFor="terms"
-									className="text-gray-700"
-								>
-									I agree to the{" "}
-									<a
-										href="#"
-										className="text-indigo-600 hover:text-indigo-500 font-medium"
-									>
-										Terms of Service
-									</a>{" "}
-									and{" "}
-									<a
-										href="#"
-										className="text-indigo-600 hover:text-indigo-500 font-medium"
-									>
-										Privacy Policy
-									</a>
-								</label>
-							</div>
-						</div>
-
-						<button
-							type="submit"
-							disabled={isLoading}
-							className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
-						>
-							{isLoading ? (
-								<div className="flex items-center">
-									<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-									Creating account...
-								</div>
-							) : (
-								"Create Account"
-							)}
-						</button>
+						<WideButton text={'Create Account'} isLoading={isLoading} isSubmit={true} />
 					</div>
 
 					<div className="text-center">

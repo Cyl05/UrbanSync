@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import UserProfile from "./components/UserProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 	return (
@@ -12,8 +13,22 @@ function App() {
 			<Route path="/" element={<Home />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/dashboard" element={<Dashboard />} />
-			<Route path="/profile" element={<UserProfile />} />
+			<Route
+				path="/dashboard"
+				element={
+					<ProtectedRoute>
+						<Dashboard />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/profile"
+				element={
+					<ProtectedRoute>
+						<UserProfile />
+					</ProtectedRoute>
+				}
+			/>
 		</Routes>
 	);
 }

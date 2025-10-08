@@ -14,7 +14,7 @@ import { useQuery } from "@apollo/client/react";
 
 const GET_USER = gql`
 	query getUser($id: uuid!) {
-		users(where: {id: {_eq: $userId}}) {
+		users(where: {id: {_eq: $id}}) {
 			id
 			email
 			name
@@ -38,17 +38,43 @@ const Dashboard: React.FC = () => {
 	}, []);
 
 	const { data, loading, error } = useQuery(GET_USER, {
-		variables: { id: userId }
+		variables: { id: userId },
+		skip: !userId, // Skip query until userId is available
 	});
 
-	if (data) {
-		console.log(data);
-	}
+	const user = data?.users?.[0];
 
 	if (loading) {
-		console.log(error);
-	} else {
-		console.error(error);
+		return (
+			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+				<div className="text-center">
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+					<p className="mt-4 text-gray-600">Loading dashboard...</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (error) {
+		console.error("Error fetching user:", error);
+		return (
+			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+				<div className="text-center">
+					<p className="text-red-600">Error loading user data</p>
+					<p className="text-sm text-gray-600 mt-2">{error.message}</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (!user) {
+		return (
+			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+				<div className="text-center">
+					<p className="text-gray-600">No user data available</p>
+				</div>
+			</div>
+		);
 	}
 
 	const mockStats = {
@@ -81,10 +107,10 @@ const Dashboard: React.FC = () => {
 						<div className="flex items-center space-x-4">
 							<div className="hidden md:block">
 								<p className="text-sm font-medium text-gray-700">
-									{/* {user.name} */}
+									{user.name}
 								</p>
 								<p className="text-xs text-gray-500 capitalize">
-									{/* {user.role} */}
+									{user.role}
 								</p>
 							</div>
 							<button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
@@ -110,7 +136,7 @@ const Dashboard: React.FC = () => {
 				{/* Welcome Section */}
 				<div className="mb-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-2">
-						{/* Welcome back, {user.name} */}
+						Welcome back, {user.name}
 					</h2>
 					<p className="text-gray-600">
 						Manage civic issues reported by your community

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
 	FaMapMarkerAlt,
@@ -9,27 +9,14 @@ import {
 	FaCog,
 } from "react-icons/fa";
 import { supabase } from "../lib/supabaseClient";
-import LoadingScreen from "../components/LoadingScreen";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchUser, clearUser } from "../store/userSlice";
+import { useAppDispatch } from "../store/hooks";
+import { clearUser } from "../store/userSlice";
+import { useAuth } from "../hooks/useAuth";
 
 const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
-	const { currentUser: user, loading, error } = useAppSelector((state) => state.user);
-
-	useEffect(() => {
-		const getUserAndFetch = async () => {
-			const session = await supabase.auth.getSession();
-			const userId = session.data?.session?.user.id;
-			
-			if (userId) {
-				dispatch(fetchUser(userId));
-			}
-		};
-
-		getUserAndFetch();
-	}, [dispatch]);
+	const { user } = useAuth();
 
 	const handleSignOut = async () => {
 		try {
@@ -44,24 +31,6 @@ const Dashboard: React.FC = () => {
 			console.error("Unexpected error during sign out:", err);
 		}
 	};
-
-	if (loading) {
-		return (
-			<LoadingScreen loadingText={'Loading dashboard...'} />
-		);
-	}
-
-	if (error) {
-		console.error("Error fetching user:", error);
-		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="text-center">
-					<p className="text-red-600">Error loading user data</p>
-					<p className="text-sm text-gray-600 mt-2">{error}</p>
-				</div>
-			</div>
-		);
-	}
 
 	if (!user) {
 		return (

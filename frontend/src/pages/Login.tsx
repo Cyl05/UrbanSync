@@ -77,7 +77,7 @@ const Login: React.FC = () => {
 			
 			if (userId) {
 				await dispatch(fetchUser(userId)).unwrap();
-				navigate("/dashboard");
+				navigate("/");
 			}
 		} catch (error) {
 			console.error("Login error:", error);

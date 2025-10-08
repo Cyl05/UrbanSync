@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/index.ts";
 import { ApolloProvider } from "@apollo/client/react";
 import { createApolloClient } from "./lib/client.ts";
+import { AuthProvider } from "./contexts/AuthProvider.tsx";
 import 'leaflet/dist/leaflet.css';
 import './index.css';
 
@@ -16,7 +17,9 @@ createRoot(document.getElementById("root")!).render(
         <StrictMode>
             <ApolloProvider client={client}>
                 <Provider store={store}>
-                    <App />
+                    <AuthProvider>
+                        <App />
+                    </AuthProvider>
                 </Provider>
             </ApolloProvider>
         </StrictMode>

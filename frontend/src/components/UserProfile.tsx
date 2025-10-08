@@ -1,34 +1,8 @@
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchUser } from "../store/userSlice";
-import { supabase } from "../lib/supabaseClient";
+import React from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const UserProfile: React.FC = () => {
-	const dispatch = useAppDispatch();
-    const { currentUser, loading, error } = useAppSelector(
-		(state) => state.user
-	);
-
-    useEffect(() => {
-        const getUserAndFetch = async () => {
-            const session = await supabase.auth.getSession();
-            const userId = session.data?.session?.user.id;
-            
-            if (userId) {
-                dispatch(fetchUser(userId));
-            }
-        };
-
-        getUserAndFetch();
-    }, [dispatch]);
-
-	if (loading) {
-		return <div>Loading user...</div>;
-	}
-
-	if (error) {
-		return <div>Error: {error}</div>;
-	}
+    const { user: currentUser } = useAuth();
 
 	if (!currentUser) {
 		return <div>No user logged in</div>;

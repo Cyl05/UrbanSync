@@ -15,17 +15,10 @@ const MapHeader: React.FC = () => {
       <div className="flex space-x-2">
         <Link
           to="/login"
-          className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
-        >
-          <FaSignInAlt className="h-4 w-4" />
-          <span>Officials</span>
-        </Link>
-        <Link
-          to="/register"
           className="bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
         >
           <FaUserPlus className="h-4 w-4" />
-          <span>Register</span>
+          <span>Login</span>
         </Link>
       </div>
     </div>

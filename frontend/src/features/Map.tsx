@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import MapClickHandler from "./MapClickHandler";
 import MapHeader from "./MapHeader";
 import { IssueCard } from "./IssueCard";
@@ -42,7 +42,9 @@ const Map = () => {
 					zoom={16}
 					style={{ height: "100vh", width: "100vw" }}
 					scrollWheelZoom={true}
+					zoomControl={false}
 				>
+					<ZoomControl position="bottomright" />
 					<TileLayer
 						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"

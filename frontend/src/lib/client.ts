@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
-import { supabase } from './supabaseClient';
 import { ApolloLink } from '@apollo/client';
 
 const createApolloClient = () => {
@@ -15,8 +14,6 @@ const createApolloClient = () => {
         });
         return forward(operation);
     });
-
-    console.log(access_token);
 
     const client = new ApolloClient({
         link: authLink.concat(httpLink),

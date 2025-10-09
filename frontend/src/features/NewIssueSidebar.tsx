@@ -1,10 +1,25 @@
 import React, { useState } from "react";
-import { FaTimes, FaMapMarkerAlt } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import {
+	GeoapifyGeocoderAutocomplete,
+	GeoapifyContext
+} from '@geoapify/react-geocoder-autocomplete';
+
+interface GeoapifyPlace {
+	properties: {
+		formatted?: string;
+		address_line1?: string;
+		lat: number;
+		lon: number;
+	};
+}
 
 interface NewIssueFormData {
 	title: string;
 	description?: string;
 	address: string;
+	latitude?: number;
+	longitude?: number;
 	photo_url?: string;
 }
 
@@ -13,20 +28,44 @@ interface NewIssueSidebarProps {
 	onClose: () => void;
 }
 
-const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose }) => {
+const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
+	isDisplayed,
+	onClose,
+}) => {
 	const [formData, setFormData] = useState<NewIssueFormData>({
 		title: "",
 		description: "",
 		address: "",
+		latitude: undefined,
+		longitude: undefined,
 		photo_url: "",
 	});
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
 		}));
+	};
+
+	const handlePlaceSelect = (value: GeoapifyPlace) => {
+		if (value) {
+			const { properties } = value;
+			setFormData((prev) => ({
+				...prev,
+				address: properties.formatted || properties.address_line1 || "",
+				latitude: properties.lat,
+				longitude: properties.lon,
+			}));
+			console.log("Selected location:", {
+				address: properties.formatted,
+				lat: properties.lat,
+				lon: properties.lon,
+			});
+		}
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -43,7 +82,9 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose 
 			>
 				<div className="flex flex-col h-full">
 					<div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-						<h2 className="text-xl font-bold text-gray-900">Report New Issue</h2>
+						<h2 className="text-xl font-bold text-gray-900">
+							Report New Issue
+						</h2>
 						<button
 							onClick={onClose}
 							className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
@@ -53,9 +94,15 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose 
 						</button>
 					</div>
 
-					<form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+					<form
+						onSubmit={handleSubmit}
+						className="flex-1 overflow-y-auto px-6 py-4 space-y-4"
+					>
 						<div>
-							<label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="title"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Title <span className="text-red-500">*</span>
 							</label>
 							<input
@@ -71,7 +118,10 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose 
 						</div>
 
 						<div>
-							<label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="description"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Description
 							</label>
 							<textarea
@@ -86,26 +136,31 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose 
 						</div>
 
 						<div>
-							<label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="address"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Address <span className="text-red-500">*</span>
 							</label>
 							<div className="relative">
-								<FaMapMarkerAlt className="absolute left-3 top-1/3 transform  text-gray-400" />
-								<input
-									type="text"
-									id="address"
-									name="address"
-									value={formData.address}
-									onChange={handleInputChange}
-									required
-									placeholder="Enter location address"
-									className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-								/>
+								<GeoapifyContext apiKey="bba4fdf685444f61829c226b09ff6aa0">
+									<GeoapifyGeocoderAutocomplete
+										placeholder="Enter address here"
+										value={formData.address}
+										type={'street'}
+										limit={5}
+										debounceDelay={300}
+										placeSelect={handlePlaceSelect}
+									/>
+								</GeoapifyContext>
 							</div>
 						</div>
 
 						<div>
-							<label htmlFor="photo_url" className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="photo_url"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Photo URL
 							</label>
 							<div className="relative">
@@ -123,7 +178,9 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({ isDisplayed, onClose 
 
 						{formData.photo_url && (
 							<div className="mt-2">
-								<p className="text-sm font-medium text-gray-700 mb-2">Photo Preview:</p>
+								<p className="text-sm font-medium text-gray-700 mb-2">
+									Photo Preview:
+								</p>
 								<img
 									src={formData.photo_url}
 									alt="Issue preview"

@@ -9,6 +9,7 @@ import { createApolloClient } from "./lib/client.ts";
 import { AuthProvider } from "./contexts/AuthProvider.tsx";
 import 'leaflet/dist/leaflet.css';
 import './index.css';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 
 const client = createApolloClient();
 

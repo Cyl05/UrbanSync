@@ -10,7 +10,7 @@ import {
 import { supabase } from "../lib/supabaseClient";
 import { useAppDispatch } from "../store/hooks";
 import { fetchUser } from "../store/userSlice";
-import WideButton from "../components/WIdeButton";
+import WideButton from "../components/WideButton";
 
 const Login: React.FC = () => {
 	const navigate = useNavigate();

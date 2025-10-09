@@ -5,6 +5,7 @@ import { IssueCard } from "./IssueCard";
 import type { IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
+import { useState } from "react";
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -25,6 +26,7 @@ type GetIssuesData = {
 };
 
 const Map = () => {
+	const [displaySidebar, setDisplaySidebar] = useState(false);
 	const handleMapClick = (lat: number, lng: number) => {
 		console.log(`Clicked at: Lat ${lat}, Lng ${lng}`);
 	};
@@ -36,25 +38,23 @@ const Map = () => {
 	if (data) {
 		return (
 			<div className="relative overflow-hidden">
-				<MapHeader />
+				<MapHeader displaySidebar={displaySidebar} setDisplaySidebar={setDisplaySidebar} />
 				<MapContainer
 					center={[12.97914, 77.61112]}
 					zoom={16}
 					style={{ height: "100vh", width: "100vw" }}
 					scrollWheelZoom={true}
 					zoomControl={false}
+					className="cursor-pointer"
 				>
-					<ZoomControl position="bottomright" />
+					{displaySidebar === false  && <ZoomControl position="bottomright" />}
 					<TileLayer
-						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 					/>
 					<TileLayer
-						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
 					/>
 					<TileLayer
-						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"
 					/>
 					<MapClickHandler onClick={handleMapClick} />

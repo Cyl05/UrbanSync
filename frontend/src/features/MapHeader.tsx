@@ -2,9 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaUserPlus, FaMapMarkerAlt, FaTachometerAlt } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
+import { TbMapPinExclamation } from "react-icons/tb";
+import NewIssueSidebar from "./NewIssueSIdebar";
 
-const MapHeader: React.FC = () => {
+interface MapHeaderProps {
+	displaySidebar: boolean;
+	setDisplaySidebar: (value: boolean | ((prev: boolean) => boolean)) => void;
+}
+
+const MapHeader: React.FC<MapHeaderProps> = ({ displaySidebar, setDisplaySidebar }) => {
 	const { isAuthenticated } = useAuth();
+
 	return (
 		<div className="absolute top-4 left-4 right-4 z-[1000] flex justify-between items-center">
 			<div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg px-4 py-2 flex items-center space-x-2">
@@ -14,13 +22,22 @@ const MapHeader: React.FC = () => {
 
 			<div className="flex space-x-2">
 				{isAuthenticated ? (
-					<Link
-						to="/dashboard"
-						className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
-					>
-						<FaTachometerAlt />
-						<span>Dashboard</span>
-					</Link>
+					<>
+						<Link
+							to="/dashboard"
+							className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
+						>
+							<FaTachometerAlt />
+							<span>Dashboard</span>
+						</Link>
+						<button
+							className="bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
+							onClick={() => setDisplaySidebar((prev) => !prev)}
+						>
+							<TbMapPinExclamation />
+							<span>New Issue</span>
+						</button>
+					</>
 				) : (
 					<Link
 						to="/login"
@@ -31,6 +48,7 @@ const MapHeader: React.FC = () => {
 					</Link>
 				)}
 			</div>
+			<NewIssueSidebar isDisplayed={displaySidebar} onClose={() => setDisplaySidebar(false)} />
 		</div>
 	);
 };

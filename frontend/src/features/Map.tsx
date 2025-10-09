@@ -6,7 +6,6 @@ import {
 	ZoomControl,
 	useMap,
 } from "react-leaflet";
-import MapClickHandler from "./MapClickHandler";
 import MapHeader from "./MapHeader";
 import { IssueCard } from "./IssueCard";
 import CenterMarker from "./CenterMarker";
@@ -14,7 +13,7 @@ import MapCenterTracker from "./MapCenterTracker";
 import type { IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -80,10 +79,6 @@ const Map = () => {
 	const [isMapPinMode, setIsMapPinMode] = useState(false);
 	const isProgrammaticMove = useRef(false);
 
-	const handleMapClick = (lat: number, lng: number) => {
-		console.log(`Clicked at: Lat ${lat}, Lng ${lng}`);
-	};
-
 	const handlePlaceSelect = (value: GeoapifyPlace) => {
 		if (value) {
 			const { properties } = value;
@@ -102,14 +97,14 @@ const Map = () => {
 		}
 	};
 
-	const handleMapCenterChange = useCallback((lat: number, lng: number) => {
+	const handleMapCenterChange = (lat: number, lng: number) => {
 		if (!isProgrammaticMove.current) {
 			setCenterCoords({
 				latitude: lat,
 				longitude: lng,
 			});
 		}
-	}, []);
+	};
 
 	const { data, loading, error } = useQuery<GetIssuesData>(GET_ISSUES);
 
@@ -134,12 +129,10 @@ const Map = () => {
 					zoomControl={false}
 					className="cursor-pointer"
 				>
-					{!isMapPinMode && (
-						<RecenterMap
-							latitude={centerCoords.latitude}
-							longitude={centerCoords.longitude}
-						/>
-					)}
+					<RecenterMap
+						latitude={centerCoords.latitude}
+						longitude={centerCoords.longitude}
+					/>
 					{displaySidebar === false && (
 						<ZoomControl position="bottomright" />
 					)}
@@ -149,7 +142,6 @@ const Map = () => {
 					<TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
 					<TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
 					<TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
-					<MapClickHandler onClick={handleMapClick} />
 					{data?.issues?.map((issue: IssueMini) => (
 						<Marker
 							key={issue.id}

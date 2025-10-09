@@ -4,6 +4,43 @@ import {
 	GeoapifyGeocoderAutocomplete,
 	GeoapifyContext,
 } from "@geoapify/react-geocoder-autocomplete";
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
+import { useAuth } from "../hooks/useAuth";
+
+const CREATE_ISSUE = gql`
+	mutation CreateIssue(
+		$title: String!
+		$description: String
+		$status: issue_status!
+		$latitude: numeric!
+		$longitude: numeric!
+		$photo_url: String
+		$created_by: uuid!
+	) {
+		insert_issues_one(
+			object: {
+				title: $title
+				description: $description
+				status: $status
+				latitude: $latitude
+				longitude: $longitude
+				photo_url: $photo_url
+				created_by: $created_by
+			}
+		) {
+			id
+			title
+			description
+			status
+			latitude
+			longitude
+			photo_url
+			created_by
+			created_at
+		}
+	}
+`;
 
 interface NewIssueSidebarProps {
 	isDisplayed: boolean;
@@ -32,11 +69,28 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 	setIsMapPinMode,
 	mapCenterCoords
 }) => {
+	const { user } = useAuth();
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
 		address: "",
 		photo_url: "",
+	});
+
+	const [createIssue, { loading, error }] = useMutation(CREATE_ISSUE, {
+		refetchQueries: ['getIssues'],
+		onCompleted: () => {
+			setFormData({
+				title: "",
+				description: "",
+				address: "",
+				photo_url: "",
+			});
+			onClose();
+		},
+		onError: (err: Error) => {
+			console.error("Error creating issue:", err);
+		}
 	});
 
 	const handleInputChange = (
@@ -49,9 +103,39 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Submitting issue:", formData);
+		
+		if (!user?.id) {
+			alert("You must be logged in to report an issue");
+			return;
+		}
+
+		if (!formData.title.trim()) {
+			alert("Please provide a title for the issue");
+			return;
+		}
+
+		if (!mapCenterCoords.latitude || !mapCenterCoords.longitude) {
+			alert("Please select a location for the issue");
+			return;
+		}
+
+		try {
+			await createIssue({
+				variables: {
+					title: formData.title,
+					description: formData.description || null,
+					status: "new",
+					latitude: mapCenterCoords.latitude,
+					longitude: mapCenterCoords.longitude,
+					photo_url: formData.photo_url || null,
+					created_by: user.id
+				}
+			});
+		} catch (err) {
+			console.error("Failed to submit issue:", err);
+		}
 	};
 
 	return (
@@ -222,20 +306,29 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 					</form>
 
 					<div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+						{error && (
+							<div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+								<p className="text-sm text-red-800">
+									Error: {error.message}
+								</p>
+							</div>
+						)}
 						<div className="flex space-x-3">
 							<button
 								type="button"
 								onClick={onClose}
-								className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium cursor-pointer"
+								disabled={loading}
+								className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								Cancel
 							</button>
 							<button
 								type="submit"
 								onClick={handleSubmit}
-								className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium cursor-pointer"
+								disabled={loading}
+								className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 							>
-								Submit Issue
+								{loading ? "Submitting..." : "Submit Issue"}
 							</button>
 						</div>
 					</div>

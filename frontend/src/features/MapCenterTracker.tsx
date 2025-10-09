@@ -19,7 +19,6 @@ const MapCenterTracker: React.FC<MapCenterTrackerProps> = ({ onCenterChange }) =
 		},
 	});
 
-	// Report initial center only once
 	useEffect(() => {
 		if (!hasReportedInitial.current) {
 			const center = map.getCenter();

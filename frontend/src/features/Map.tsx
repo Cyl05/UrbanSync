@@ -9,10 +9,12 @@ import {
 import MapClickHandler from "./MapClickHandler";
 import MapHeader from "./MapHeader";
 import { IssueCard } from "./IssueCard";
+import CenterMarker from "./CenterMarker";
+import MapCenterTracker from "./MapCenterTracker";
 import type { IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -75,6 +77,8 @@ const Map = () => {
 		latitude: undefined,
 		longitude: undefined,
 	});
+	const [isMapPinMode, setIsMapPinMode] = useState(false);
+	const isProgrammaticMove = useRef(false);
 
 	const handleMapClick = (lat: number, lng: number) => {
 		console.log(`Clicked at: Lat ${lat}, Lng ${lng}`);
@@ -83,6 +87,7 @@ const Map = () => {
 	const handlePlaceSelect = (value: GeoapifyPlace) => {
 		if (value) {
 			const { properties } = value;
+			isProgrammaticMove.current = true;
 			setCenterCoords({
 				latitude: properties.lat,
 				longitude: properties.lon,
@@ -91,8 +96,20 @@ const Map = () => {
 				latitude: properties.lat,
 				longitude: properties.lon
 			});
+			setTimeout(() => {
+				isProgrammaticMove.current = false;
+			}, 100);
 		}
 	};
+
+	const handleMapCenterChange = useCallback((lat: number, lng: number) => {
+		if (!isProgrammaticMove.current) {
+			setCenterCoords({
+				latitude: lat,
+				longitude: lng,
+			});
+		}
+	}, []);
 
 	const { data, loading, error } = useQuery<GetIssuesData>(GET_ISSUES);
 
@@ -105,6 +122,9 @@ const Map = () => {
 					displaySidebar={displaySidebar}
 					setDisplaySidebar={setDisplaySidebar}
 					handlePlaceSelect={handlePlaceSelect}
+					isMapPinMode={isMapPinMode}
+					setIsMapPinMode={setIsMapPinMode}
+					mapCenterCoords={centerCoords}
 				/>
 				<MapContainer
 					center={[12.97914, 77.61112]}
@@ -114,12 +134,17 @@ const Map = () => {
 					zoomControl={false}
 					className="cursor-pointer"
 				>
-					<RecenterMap
-						latitude={centerCoords.latitude}
-						longitude={centerCoords.longitude}
-					/>
+					{!isMapPinMode && (
+						<RecenterMap
+							latitude={centerCoords.latitude}
+							longitude={centerCoords.longitude}
+						/>
+					)}
 					{displaySidebar === false && (
 						<ZoomControl position="bottomright" />
+					)}
+					{displaySidebar && isMapPinMode && (
+						<MapCenterTracker onCenterChange={handleMapCenterChange} />
 					)}
 					<TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
 					<TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
@@ -136,12 +161,13 @@ const Map = () => {
 						</Marker>
 					))}
 
-					{displaySidebar && tempMarker.latitude && tempMarker.longitude && (
+					{displaySidebar && !isMapPinMode && tempMarker.latitude && tempMarker.longitude && (
 						<Marker
 							position={[tempMarker.latitude, tempMarker.longitude]}
 						/>
 					)}
 				</MapContainer>
+				{displaySidebar && isMapPinMode && <CenterMarker />}
 			</div>
 		);
 	}

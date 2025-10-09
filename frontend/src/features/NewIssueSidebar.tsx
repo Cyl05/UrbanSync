@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 import {
 	GeoapifyGeocoderAutocomplete,
 	GeoapifyContext,
@@ -16,9 +16,22 @@ interface NewIssueSidebarProps {
 			lon: number;
 		};
 	}) => void;
+	isMapPinMode: boolean;
+	setIsMapPinMode: (value: boolean) => void;
+	mapCenterCoords: {
+		latitude: number;
+		longitude: number;
+	};
 }
 
-const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({isDisplayed, onClose, handlePlaceSelect}) => {
+const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
+	isDisplayed, 
+	onClose, 
+	handlePlaceSelect,
+	isMapPinMode,
+	setIsMapPinMode,
+	mapCenterCoords
+}) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
@@ -104,29 +117,71 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({isDisplayed, onClose, 
 						</div>
 
 						<div>
-							<label
-								htmlFor="address"
-								className="block text-sm font-medium text-gray-700 mb-1"
-							>
-								Address <span className="text-red-500">*</span>
+							<label className="block text-sm font-medium text-gray-700 mb-2">
+								Location <span className="text-red-500">*</span>
 							</label>
-							<div className="relative">
-								<GeoapifyContext apiKey="bba4fdf685444f61829c226b09ff6aa0">
-									<GeoapifyGeocoderAutocomplete
-										placeholder="Enter address here"
-										value={formData.address}
-										limit={5}
-										debounceDelay={300}
-										placeSelect={(place) => {
-											setFormData((prev) => ({
-												...prev,
-												address: place.properties.formatted || "",
-											}));
-											handlePlaceSelect(place);
-										}}
-									/>
-								</GeoapifyContext>
+							
+							<div className="flex space-x-2 mb-3">
+								<button
+									type="button"
+									onClick={() => setIsMapPinMode(false)}
+									className={`flex-1 px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer ${
+										!isMapPinMode
+											? "bg-indigo-600 text-white"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									}`}
+								>
+									Search Address
+								</button>
+								<button
+									type="button"
+									onClick={() => setIsMapPinMode(true)}
+									className={`flex-1 px-3 py-2 rounded-lg font-medium transition-colors flex items-center justify-center space-x-1 cursor-pointer ${
+										isMapPinMode
+											? "bg-indigo-600 text-white"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									}`}
+								>
+									<FaMapMarkerAlt className="h-3 w-3" />
+									<span>Pin on Map</span>
+								</button>
 							</div>
+
+							{!isMapPinMode ? (
+								<div className="relative">
+									<GeoapifyContext apiKey="bba4fdf685444f61829c226b09ff6aa0">
+										<GeoapifyGeocoderAutocomplete
+											placeholder="Enter address here"
+											value={formData.address}
+											limit={5}
+											debounceDelay={300}
+											placeSelect={(place) => {
+												setFormData((prev) => ({
+													...prev,
+													address: place.properties.formatted || "",
+												}));
+												handlePlaceSelect(place);
+											}}
+										/>
+									</GeoapifyContext>
+								</div>
+							) : (
+								<div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+									<p className="text-sm text-blue-800 font-medium">
+										Pan the map to position the marker
+									</p>
+									<div className="text-xs text-gray-600 space-y-1">
+										<div className="flex justify-between">
+											<span className="font-medium">Latitude:</span>
+											<span className="font-mono">{mapCenterCoords.latitude.toFixed(6)}</span>
+										</div>
+										<div className="flex justify-between">
+											<span className="font-medium">Longitude:</span>
+											<span className="font-mono">{mapCenterCoords.longitude.toFixed(6)}</span>
+										</div>
+									</div>
+								</div>
+							)}
 						</div>
 
 						<div>

@@ -16,12 +16,21 @@ interface MapHeaderProps {
 			lon: number;
 		};
 	}) => void;
+	isMapPinMode: boolean;
+	setIsMapPinMode: (value: boolean) => void;
+	mapCenterCoords: {
+		latitude: number;
+		longitude: number;
+	};
 }
 
 const MapHeader: React.FC<MapHeaderProps> = ({
 	displaySidebar,
 	setDisplaySidebar,
-	handlePlaceSelect
+	handlePlaceSelect,
+	isMapPinMode,
+	setIsMapPinMode,
+	mapCenterCoords
 }) => {
 	const { isAuthenticated } = useAuth();
 
@@ -64,6 +73,9 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 				isDisplayed={displaySidebar}
 				onClose={() => setDisplaySidebar(false)}
 				handlePlaceSelect={handlePlaceSelect}
+				isMapPinMode={isMapPinMode}
+				setIsMapPinMode={setIsMapPinMode}
+				mapCenterCoords={mapCenterCoords}
 			/>
 		</div>
 	);

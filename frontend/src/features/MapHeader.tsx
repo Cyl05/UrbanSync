@@ -8,9 +8,21 @@ import NewIssueSidebar from "./NewIssueSIdebar";
 interface MapHeaderProps {
 	displaySidebar: boolean;
 	setDisplaySidebar: (value: boolean | ((prev: boolean) => boolean)) => void;
+	handlePlaceSelect: (place: {
+		properties: {
+			formatted?: string;
+			address_line1?: string;
+			lat: number;
+			lon: number;
+		};
+	}) => void;
 }
 
-const MapHeader: React.FC<MapHeaderProps> = ({ displaySidebar, setDisplaySidebar }) => {
+const MapHeader: React.FC<MapHeaderProps> = ({
+	displaySidebar,
+	setDisplaySidebar,
+	handlePlaceSelect
+}) => {
 	const { isAuthenticated } = useAuth();
 
 	return (
@@ -48,7 +60,11 @@ const MapHeader: React.FC<MapHeaderProps> = ({ displaySidebar, setDisplaySidebar
 					</Link>
 				)}
 			</div>
-			<NewIssueSidebar isDisplayed={displaySidebar} onClose={() => setDisplaySidebar(false)} />
+			<NewIssueSidebar
+				isDisplayed={displaySidebar}
+				onClose={() => setDisplaySidebar(false)}
+				handlePlaceSelect={handlePlaceSelect}
+			/>
 		</div>
 	);
 };

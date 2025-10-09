@@ -2,42 +2,27 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import {
 	GeoapifyGeocoderAutocomplete,
-	GeoapifyContext
-} from '@geoapify/react-geocoder-autocomplete';
-
-interface GeoapifyPlace {
-	properties: {
-		formatted?: string;
-		address_line1?: string;
-		lat: number;
-		lon: number;
-	};
-}
-
-interface NewIssueFormData {
-	title: string;
-	description?: string;
-	address: string;
-	latitude?: number;
-	longitude?: number;
-	photo_url?: string;
-}
+	GeoapifyContext,
+} from "@geoapify/react-geocoder-autocomplete";
 
 interface NewIssueSidebarProps {
 	isDisplayed: boolean;
 	onClose: () => void;
+	handlePlaceSelect: (place: {
+		properties: {
+			formatted?: string;
+			address_line1?: string;
+			lat: number;
+			lon: number;
+		};
+	}) => void;
 }
 
-const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
-	isDisplayed,
-	onClose,
-}) => {
-	const [formData, setFormData] = useState<NewIssueFormData>({
+const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({isDisplayed, onClose, handlePlaceSelect}) => {
+	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
 		address: "",
-		latitude: undefined,
-		longitude: undefined,
 		photo_url: "",
 	});
 
@@ -49,23 +34,6 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 			...prev,
 			[name]: value,
 		}));
-	};
-
-	const handlePlaceSelect = (value: GeoapifyPlace) => {
-		if (value) {
-			const { properties } = value;
-			setFormData((prev) => ({
-				...prev,
-				address: properties.formatted || properties.address_line1 || "",
-				latitude: properties.lat,
-				longitude: properties.lon,
-			}));
-			console.log("Selected location:", {
-				address: properties.formatted,
-				lat: properties.lat,
-				lon: properties.lon,
-			});
-		}
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -147,10 +115,15 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 									<GeoapifyGeocoderAutocomplete
 										placeholder="Enter address here"
 										value={formData.address}
-										type={'street'}
 										limit={5}
 										debounceDelay={300}
-										placeSelect={handlePlaceSelect}
+										placeSelect={(place) => {
+											setFormData((prev) => ({
+												...prev,
+												address: place.properties.formatted || "",
+											}));
+											handlePlaceSelect(place);
+										}}
 									/>
 								</GeoapifyContext>
 							</div>

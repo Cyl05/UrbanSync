@@ -10,6 +10,7 @@ import MapHeader from "./MapHeader";
 import { IssueCard } from "./IssueCard";
 import CenterMarker from "./CenterMarker";
 import MapCenterTracker from "./MapCenterTracker";
+import LoadingScreen from "../components/LoadingScreen";
 import type { IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
@@ -108,8 +109,24 @@ const Map = () => {
 
 	const { data, loading, error } = useQuery<GetIssuesData>(GET_ISSUES);
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div>Error: {error.message}</div>;
+	if (loading) return <LoadingScreen loadingText="Loading map and issues..." />;
+	if (error) {
+		return (
+			<div className="flex items-center justify-center h-screen bg-gray-50">
+				<div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
+					<div className="text-red-500 text-5xl mb-4">⚠️</div>
+					<h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Map</h2>
+					<p className="text-gray-600">{error.message}</p>
+					<button
+						onClick={() => window.location.reload()}
+						className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+					>
+						Reload Page
+					</button>
+				</div>
+			</div>
+		);
+	}
 	if (data) {
 		return (
 			<div className="relative overflow-hidden">

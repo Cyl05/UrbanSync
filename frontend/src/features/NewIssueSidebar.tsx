@@ -233,7 +233,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 
 							{!isMapPinMode ? (
 								<div className="relative">
-									<GeoapifyContext apiKey="bba4fdf685444f61829c226b09ff6aa0">
+									<GeoapifyContext apiKey={import.meta.env.GEOAPIFYAPIKEY}>
 										<GeoapifyGeocoderAutocomplete
 											placeholder="Enter address here"
 											value={formData.address}

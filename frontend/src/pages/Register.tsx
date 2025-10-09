@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import type { UserRole } from "../types/schema";
 import { supabase } from "../lib/supabaseClient";
-import WideButton from "../components/WIdeButton";
+import WideButton from "../components/WideButton";
 
 const Register: React.FC = () => {
 	const [formData, setFormData] = useState({
@@ -69,34 +69,39 @@ const Register: React.FC = () => {
 		e.preventDefault();
 
 		if (!validateForm()) {
-			console.log("invalid form");
 			return;
 		}
 
 		setIsLoading(true);
 
 		try {
-			console.log("Registration attempt:", {
-				...formData,
-				password: "[REDACTED]",
-				confirmPassword: "[REDACTED]",
-			});
-
-			const { data, error } = await supabase.auth.signUp({
+			const { error } = await supabase.auth.signUp({
 				email: formData.email,
 				password: formData.password,
 			});
 
-			console.log(data);
-
 			if (error) {
-				throw Error(`Registeration failed - Status Code: ${error.code}`);
+				// Provide specific error messages based on error type
+				let errorMessage = "Registration failed. Please try again.";
+				
+				if (error.message.toLowerCase().includes("already registered")) {
+					errorMessage = "This email is already registered. Please sign in instead.";
+				} else if (error.message.toLowerCase().includes("invalid email")) {
+					errorMessage = "Please enter a valid email address.";
+				} else if (error.message.toLowerCase().includes("password")) {
+					errorMessage = "Password does not meet requirements. Please use a stronger password.";
+				} else if (error.message) {
+					errorMessage = error.message;
+				}
+				
+				throw new Error(errorMessage);
 			}
 
 			window.location.href = "/login";
 		} catch (error) {
 			console.error("Registration error:", error);
-			setErrors({ general: "Registration failed. Please try again." });
+			const errorMessage = error instanceof Error ? error.message : "Registration failed. Please try again.";
+			setErrors({ general: errorMessage });
 		} finally {
 			setIsLoading(false);
 		}

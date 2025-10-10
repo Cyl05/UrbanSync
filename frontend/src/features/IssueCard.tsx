@@ -1,5 +1,6 @@
 // import React from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import type { IssueMini } from "../types/schema";
 
 interface IssueCardProps {
@@ -7,6 +8,12 @@ interface IssueCardProps {
 }
 
 export const IssueCard = ({ issue }: IssueCardProps) => {
+	const navigate = useNavigate();
+
+	const handleViewIssue = () => {
+		navigate(`/issue/${issue.id}`);
+	};
+
 	return (
 		<div className="max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
 			{issue?.photo_url
@@ -28,7 +35,10 @@ export const IssueCard = ({ issue }: IssueCardProps) => {
 					{issue.description}
 				</p>
 
-				<button className="group w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md cursor-pointer">
+				<button 
+					onClick={handleViewIssue}
+					className="group w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md cursor-pointer"
+				>
 					<span>View Issue</span>
                     <FaArrowUpRightFromSquare />
 				</button>

@@ -31,12 +31,13 @@ const GET_ISSUES = gql`
 	}
 `;
 
-const customIcon = L.icon({
-    iconUrl: 'https://i.ibb.co/Kz834gDZ/image-removebg-preview-5-removebg-preview.png',
-
-    iconSize:     [60, 60], // size of the icon
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+// Custom marker using DivIcon with img element (works reliably in production)
+const customIcon = L.divIcon({
+    html: `<img src="https://i.ibb.co/Kz834gDZ/image-removebg-preview-5-removebg-preview.png" style="width: 60px; height: 60px;" class="drop-shadow-lg" />`,
+    className: 'custom-marker-icon',
+    iconSize: [60, 60],
+    iconAnchor: [30, 60],
+    popupAnchor: [0, -60]
 });
 
 type GetIssuesData = {

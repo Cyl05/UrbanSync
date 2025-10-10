@@ -15,6 +15,7 @@ import type { IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useEffect, useState, useRef } from "react";
+import L from 'leaflet';
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -29,6 +30,14 @@ const GET_ISSUES = gql`
 		}
 	}
 `;
+
+const customIcon = L.icon({
+    iconUrl: 'https://i.ibb.co/Kz834gDZ/image-removebg-preview-5-removebg-preview.png',
+
+    iconSize:     [60, 60], // size of the icon
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
 
 type GetIssuesData = {
 	issues: IssueMini[];
@@ -163,6 +172,7 @@ const Map = () => {
 						<Marker
 							key={issue.id}
 							position={[issue.latitude, issue.longitude]}
+							icon={customIcon}
 						>
 							<Popup>
 								<IssueCard issue={issue} />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaTimes, FaMapMarkerAlt } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import {
 	GeoapifyGeocoderAutocomplete,
 	GeoapifyContext,
@@ -226,7 +226,6 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 									}`}
 								>
-									<FaMapMarkerAlt className="h-3 w-3" />
 									<span>Pin on Map</span>
 								</button>
 							</div>

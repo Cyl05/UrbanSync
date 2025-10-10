@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaUserPlus, FaMapMarkerAlt, FaTachometerAlt } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import { TbMapPinExclamation } from "react-icons/tb";
-import NewIssueSidebar from "./NewIssueSIdebar";
+import NewIssueSidebar from "./NewIssueSidebar";
 
 interface MapHeaderProps {
 	displaySidebar: boolean;

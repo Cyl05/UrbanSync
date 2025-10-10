@@ -7,12 +7,14 @@ import {
 import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client/react";
 import { useAuth } from "../hooks/useAuth";
+import { IssueCategoryLabels, type IssueType } from "../types/schema";
 
 const CREATE_ISSUE = gql`
 	mutation CreateIssue(
 		$title: String!
 		$description: String
 		$status: issue_status!
+		$issue_type: issue_type!
 		$latitude: numeric!
 		$longitude: numeric!
 		$photo_url: String
@@ -23,6 +25,7 @@ const CREATE_ISSUE = gql`
 				title: $title
 				description: $description
 				status: $status
+				issue_type: $issue_type
 				latitude: $latitude
 				longitude: $longitude
 				photo_url: $photo_url
@@ -33,6 +36,7 @@ const CREATE_ISSUE = gql`
 			title
 			description
 			status
+			issue_type
 			latitude
 			longitude
 			photo_url
@@ -75,6 +79,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 		description: "",
 		address: "",
 		photo_url: "",
+		issue_type: "" as IssueType | "",
 	});
 
 	const [createIssue, { loading, error }] = useMutation(CREATE_ISSUE, {
@@ -85,6 +90,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 				description: "",
 				address: "",
 				photo_url: "",
+				issue_type: "",
 			});
 			onClose();
 		},
@@ -94,7 +100,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 	});
 
 	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
 	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({
@@ -116,6 +122,11 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 			return;
 		}
 
+		if (!formData.issue_type) {
+			alert("Please select an issue type");
+			return;
+		}
+
 		if (!mapCenterCoords.latitude || !mapCenterCoords.longitude) {
 			alert("Please select a location for the issue");
 			return;
@@ -127,6 +138,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 					title: formData.title,
 					description: formData.description || null,
 					status: "new",
+					issue_type: formData.issue_type,
 					latitude: mapCenterCoords.latitude,
 					longitude: mapCenterCoords.longitude,
 					photo_url: formData.photo_url || null,
@@ -198,6 +210,30 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 								placeholder="Provide additional details about the issue"
 								className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
 							/>
+						</div>
+
+						<div>
+							<label
+								htmlFor="issue_type"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
+								Issue Type <span className="text-red-500">*</span>
+							</label>
+							<select
+								id="issue_type"
+								name="issue_type"
+								value={formData.issue_type}
+								onChange={handleInputChange}
+								required
+								className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+							>
+								<option value="">Select issue type...</option>
+								{Object.entries(IssueCategoryLabels).map(([key, label]) => (
+									<option key={key} value={key}>
+										{label}
+									</option>
+								))}
+							</select>
 						</div>
 
 						<div>

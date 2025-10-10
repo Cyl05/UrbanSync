@@ -11,7 +11,7 @@ import { IssueCard } from "./IssueCard";
 import CenterMarker from "./CenterMarker";
 import MapCenterTracker from "./MapCenterTracker";
 import LoadingScreen from "../components/LoadingScreen";
-import type { IssueMini } from "../types/schema";
+import { type IssueMini } from "../types/schema";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useEffect, useState, useRef } from "react";
@@ -28,6 +28,7 @@ const GET_ISSUES = gql`
 			longitude
 			photo_url
 			status
+			issue_type
 		}
 	}
 `;

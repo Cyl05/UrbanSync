@@ -2,6 +2,18 @@
 export type UserRole = "citizen" | "official" | "admin";
 export type IssueStatus = "new" | "in_progress" | "resolved";
 export type AuditAction = "create" | "update" | "delete" | "assign";
+export type IssueType = 
+  | "roads_pavements"
+  | "street_lights"
+  | "traffic_signals"
+  | "water_supply"
+  | "drainage_sewerage"
+  | "garbage_collection"
+  | "illegal_dumping"
+  | "air_pollution"
+  | "noise_pollution"
+  | "tree_issues"
+  | "electricity";
 
 // USERS
 export interface User {
@@ -27,7 +39,8 @@ export interface IssueMini {
     latitude: number;
     longitude: number;
     photo_url?: string;
-    status: IssueStatus
+    status: IssueStatus;
+    issue_type?: IssueType;
 }
 
 // ISSUES
@@ -36,6 +49,7 @@ export interface Issue {
   title: string;
   description?: string;
   status: IssueStatus;
+  issue_type: IssueType;
   latitude: number;
   longitude: number;
   photo_url?: string;
@@ -74,3 +88,18 @@ export interface AuditLog {
   performed_by?: string;           // references User.id
   timestamp: string;
 }
+
+// ISSUE TYPES
+export const IssueCategoryLabels = {
+  roads_pavements: 'Roads & Pavements',
+  street_lights: 'Street Lights',
+  traffic_signals: 'Traffic Signals',
+  water_supply: 'Water Supply',
+  drainage_sewerage: 'Drainage & Sewerage',
+  garbage_collection: 'Garbage Collection',
+  illegal_dumping: 'Illegal Dumping',
+  air_pollution: 'Air Pollution',
+  noise_pollution: 'Noise Pollution',
+  tree_issues: 'Tree Issues',
+  electricity: 'Electricity'
+} as const;

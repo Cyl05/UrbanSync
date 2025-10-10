@@ -16,6 +16,7 @@ import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useEffect, useState, useRef } from "react";
 import L from 'leaflet';
+import { useNavigate } from "react-router-dom";
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -78,6 +79,8 @@ const RecenterMap = ({
 };
 
 const Map = () => {
+	const navigate = useNavigate();
+
 	const [displaySidebar, setDisplaySidebar] = useState(false);
 	const [centerCoords, setCenterCoords] = useState({
 		latitude: 12.97914,
@@ -127,12 +130,22 @@ const Map = () => {
 					<div className="text-red-500 text-5xl mb-4">⚠️</div>
 					<h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Map</h2>
 					<p className="text-gray-600">{error.message}</p>
-					<button
-						onClick={() => window.location.reload()}
-						className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-					>
-						Reload Page
-					</button>
+					{ error.message.startsWith("Malformed") ? (
+							<button 
+								onClick={() => navigate('/login')}
+								className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-800 transition-colors duration-200 cursor-pointer mt-5"
+							>
+								Login
+							</button>
+						) : (
+							<button
+								onClick={() => window.location.reload()}
+								className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+							>
+								Reload Page
+							</button>
+						)
+					}
 				</div>
 			</div>
 		);

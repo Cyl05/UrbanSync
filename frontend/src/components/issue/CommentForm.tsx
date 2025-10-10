@@ -1,14 +1,42 @@
 import { useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
+import { useMutation } from "@apollo/client/react";
+import { useAuth } from "../../hooks/useAuth";
+import { gql } from "@apollo/client";
 
 interface CommentFormProps {
 	issueId: string;
-	onSubmitComment?: (content: string) => void;
+	onCommentAdded?: () => void;
 }
 
-const CommentForm = ({ issueId: _issueId, onSubmitComment }: CommentFormProps) => {
+const ADD_COMMENT = gql`
+  mutation AddComment($issue_id: uuid!, $author_id: uuid!, $content: String!) {
+    insert_comments_one(
+      object: {
+        issue_id: $issue_id
+        author_id: $author_id
+        content: $content
+      }
+    ) {
+      id
+      content
+      created_at
+      user {
+        id
+        name
+        role
+      }
+    }
+  }
+`;
+
+
+const CommentForm = ({ issueId, onCommentAdded }: CommentFormProps) => {
 	const [commentText, setCommentText] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const { user } = useAuth();
+	const [addComment] = useMutation(ADD_COMMENT);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -17,16 +45,34 @@ const CommentForm = ({ issueId: _issueId, onSubmitComment }: CommentFormProps) =
 			return;
 		}
 
-		setIsSubmitting(true);
-
-		if (onSubmitComment) {
-			onSubmitComment(commentText.trim());
+		if (!user) {
+			setError("You must be logged in to comment");
+			return;
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		setIsSubmitting(true);
+		setError(null);
 
-		setCommentText("");
-		setIsSubmitting(false);
+		try {
+			await addComment({
+				variables: {
+					issue_id: issueId,
+					author_id: user.id,
+					content: commentText.trim(),
+				},
+			});
+
+			setCommentText("");
+			
+			if (onCommentAdded) {
+				onCommentAdded();
+			}
+		} catch (err) {
+			console.error("Error adding comment:", err);
+			setError("Failed to add comment. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -34,14 +80,20 @@ const CommentForm = ({ issueId: _issueId, onSubmitComment }: CommentFormProps) =
 			<h2 className="text-xl font-semibold text-gray-900 mb-4">
 				Add a Comment
 			</h2>
+			{error && (
+				<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+					<p className="text-sm text-red-600">{error}</p>
+				</div>
+			)}
+			{!user && (
+				<div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+					<p className="text-sm text-yellow-800">
+						Please log in to add a comment.
+					</p>
+				</div>
+			)}
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div>
-					<label
-						htmlFor="comment"
-						className="block text-sm font-medium text-gray-700 mb-2"
-					>
-						Your Comment
-					</label>
 					<textarea
 						id="comment"
 						rows={4}
@@ -51,15 +103,12 @@ const CommentForm = ({ issueId: _issueId, onSubmitComment }: CommentFormProps) =
 						className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
 						disabled={isSubmitting}
 					/>
-					<p className="mt-1 text-sm text-gray-500">
-						{commentText.length} / 500 characters
-					</p>
 				</div>
 
 				<div className="flex justify-end pt-2">
 					<button
 						type="submit"
-						disabled={!commentText.trim() || isSubmitting}
+						disabled={!commentText.trim() || isSubmitting || !user}
 						className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{isSubmitting ? (

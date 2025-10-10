@@ -118,13 +118,13 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 								"_blank"
 							)
 						}
-						className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+						className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium cursor-pointer"
 					>
 						View on Google Maps
 					</button>
 					<button
 						onClick={() => navigate("/")}
-						className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+						className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium cursor-pointer"
 					>
 						Back to Map
 					</button>

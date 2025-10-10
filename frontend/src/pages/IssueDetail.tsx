@@ -11,7 +11,7 @@ const IssueDetail = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 
-	const { data, loading, error } = useIssueDetails(id);
+	const { data, loading, error, refetch } = useIssueDetails(id);
 
 	if (loading)
 		return <LoadingScreen loadingText="Loading issue details..." />;
@@ -67,7 +67,7 @@ const IssueDetail = () => {
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 					<button
 						onClick={() => navigate(-1)}
-						className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4"
+						className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4 hover:bg-gray-100 cursor-pointer px-5 py-2 rounded-md"
 					>
 						<FaArrowLeft /> Back
 					</button>
@@ -82,7 +82,11 @@ const IssueDetail = () => {
 
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-					<IssueMainContent issue={issue} formatDate={formatDate} />
+					<IssueMainContent 
+						issue={issue} 
+						formatDate={formatDate}
+						onCommentAdded={() => refetch()}
+					/>
 					<IssueSidebar issue={issue} formatDate={formatDate} />
 				</div>
 			</div>

@@ -8,9 +8,10 @@ interface IssueMainContentProps {
 		attachments: Array<Attachment & { user?: User }>;
 	};
 	formatDate: (dateString: string) => string;
+	onCommentAdded?: () => void;
 }
 
-const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
+const IssueMainContent = ({ issue, formatDate, onCommentAdded }: IssueMainContentProps) => {
 	return (
 		<div className="lg:col-span-2 space-y-6">
 			{issue.photo_url && (
@@ -110,9 +111,7 @@ const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
 
 			<CommentForm
 				issueId={issue.id}
-				onSubmitComment={(content) => {
-					console.log("New comment:", { content });
-				}}
+				onCommentAdded={onCommentAdded}
 			/>
 
 			{issue.attachments && issue.attachments.length > 0 && (

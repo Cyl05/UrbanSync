@@ -49,9 +49,6 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 							<p className="text-gray-900 font-medium">
 								{issue.userByCreatedBy.name}
 							</p>
-							<p className="text-gray-600 text-sm">
-								{issue.userByCreatedBy.email}
-							</p>
 						</div>
 					)}
 

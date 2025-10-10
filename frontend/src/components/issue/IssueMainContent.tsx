@@ -1,5 +1,6 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
 import type { Issue, User, Comment, Attachment } from "../../types/schema";
+import CommentForm from "./CommentForm";
 
 interface IssueMainContentProps {
 	issue: Issue & {
@@ -68,14 +69,6 @@ const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
 							},${issue.longitude}`}
 						/>
 					</div>
-					<a
-						href={`https://www.openstreetmap.org/?mlat=${issue.latitude}&mlon=${issue.longitude}#map=17/${issue.latitude}/${issue.longitude}`}
-						target="_blank"
-						rel="noopener noreferrer"
-						className="inline-block text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-					>
-						View on OpenStreetMap →
-					</a>
 				</div>
 			</div>
 
@@ -88,9 +81,9 @@ const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
 						{issue.comments.map((comment) => (
 							<div
 								key={comment.id}
-								className="border-l-4 border-indigo-500 pl-4 py-2"
+								className="bg-indigo-100 px-5 py-2 rounded-t-md rounded-r-md"
 							>
-								<div className="flex items-center justify-between mb-2">
+								<div className="flex items-center justify-between mb-2 border-b-2 border-gray-400">
 									<div className="flex items-center gap-2">
 										<span className="font-medium text-gray-900">
 											{comment.user?.name ||
@@ -99,11 +92,6 @@ const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
 										{comment.user?.role && (
 											<span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
 												{comment.user.role}
-											</span>
-										)}
-										{comment.public && (
-											<span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">
-												Public
 											</span>
 										)}
 									</div>
@@ -119,6 +107,13 @@ const IssueMainContent = ({ issue, formatDate }: IssueMainContentProps) => {
 					</div>
 				</div>
 			)}
+
+			<CommentForm
+				issueId={issue.id}
+				onSubmitComment={(content) => {
+					console.log("New comment:", { content });
+				}}
+			/>
 
 			{issue.attachments && issue.attachments.length > 0 && (
 				<div className="bg-white rounded-lg shadow-sm p-6">

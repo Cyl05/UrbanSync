@@ -38,7 +38,6 @@ export const GET_ISSUE_DETAILS = gql`
       comments(order_by: { created_at: desc }) {
         id
         content
-        public
         created_at
         user {
           id
@@ -59,19 +58,19 @@ export const GET_ISSUE_DETAILS = gql`
   }
 `;
 
-export interface IssueDetailData {
-  issues_by_pk: Issue & {
-    userByCreatedBy?: User;
-    department?: Department;
-    user?: User;
-    comments: Array<Comment & { user?: User }>;
-    attachments: Array<Attachment & { user?: User }>;
-  };
+interface IssueDetailData {
+	issues_by_pk: Issue & {
+		userByCreatedBy?: User;
+		department?: Department;
+		user?: User;
+		comments: Array<Comment & { user?: User }>;
+		attachments: Array<Attachment & { user?: User }>;
+	};
 }
 
 export const useIssueDetails = (id: string | undefined) => {
-  return useQuery<IssueDetailData>(GET_ISSUE_DETAILS, {
-    variables: { id },
-    skip: !id,
-  });
+	return useQuery<IssueDetailData>(GET_ISSUE_DETAILS, {
+		variables: { id },
+		skip: !id,
+	});
 };

@@ -186,7 +186,7 @@ const Register: React.FC = () => {
 								<option value="citizen">
 									Citizen - Report and view issues
 								</option>
-								<option value="official">
+								<option value="department">
 									Department Employee - Manage and resolve issues
 								</option>
 							</select>

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import OfficialDashboard from "./pages/OfficialDashboard";
 import IssueDetail from "./pages/IssueDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -19,6 +20,14 @@ function App() {
 				element={
 					<ProtectedRoute>
 						<Dashboard />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/department/dashboard"
+				element={
+					<ProtectedRoute>
+						<OfficialDashboard />
 					</ProtectedRoute>
 				}
 			/>

@@ -22,6 +22,7 @@ export interface User {
 	email: string;
 	role: UserRole;
 	created_at: string;
+	department?: Department;
 }
 
 // DEPARTMENTS

@@ -17,6 +17,7 @@ import { useQuery } from "@apollo/client/react";
 import { useEffect, useState, useRef } from "react";
 import L from 'leaflet';
 import { useNavigate } from "react-router-dom";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const GET_ISSUES = gql`
 	query getIssues {
@@ -125,34 +126,11 @@ const Map = () => {
 
 	if (loading) return <LoadingScreen loadingText="Loading map and issues..." />;
 	if (error) {
-		return (
-			<div className="flex items-center justify-center h-screen bg-gray-50">
-				<div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
-					<div className="text-red-500 text-5xl mb-4">⚠️</div>
-					<h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Map</h2>
-					<p className="text-gray-600">{error.message}</p>
-					{ error.message.startsWith("Malformed") ? (
-						<>
-							<p className="text-gray-600">Try refreshing the page or logging in</p>
-							<button 
-								onClick={() => navigate('/login')}
-								className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-800 transition-colors duration-200 cursor-pointer mt-5"
-							>
-								Login
-							</button>
-						</>
-						) : (
-							<button
-								onClick={() => window.location.reload()}
-								className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-							>
-								Reload Page
-							</button>
-						)
-					}
-				</div>
-			</div>
-		);
+		if (error.message.startsWith("Malformd")) {
+			return <ErrorDisplay message={error.message} handleClick={() => navigate('/login')} buttonText={'Login'} />
+		} else {
+			return <ErrorDisplay message={error.message} handleClick={() => window.location.reload()} buttonText={'Reload'} />
+		}
 	}
 	if (data) {
 		return (

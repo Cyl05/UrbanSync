@@ -77,8 +77,15 @@ const Login: React.FC = () => {
 			const userId = data.session?.user.id;
 			
 			if (userId) {
-				await dispatch(fetchUser(userId)).unwrap();
-				navigate("/");
+				const userResult = await dispatch(fetchUser(userId)).unwrap();
+				
+				if (userResult.role === "department") {
+					navigate("/department/dashboard");
+				} else if (userResult.role === "admin") {
+					navigate("/dashboard");
+				} else {
+					navigate("/");
+				}
 			}
 		} catch (error) {
 			console.error("Login error:", error);

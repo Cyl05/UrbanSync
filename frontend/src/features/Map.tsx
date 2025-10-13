@@ -132,12 +132,15 @@ const Map = () => {
 					<h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Map</h2>
 					<p className="text-gray-600">{error.message}</p>
 					{ error.message.startsWith("Malformed") ? (
+						<>
+							<p className="text-gray-600">Try refreshing the page or logging in</p>
 							<button 
 								onClick={() => navigate('/login')}
 								className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-800 transition-colors duration-200 cursor-pointer mt-5"
 							>
 								Login
 							</button>
+						</>
 						) : (
 							<button
 								onClick={() => window.location.reload()}

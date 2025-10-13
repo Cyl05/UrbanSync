@@ -1,5 +1,5 @@
 // ENUMS
-export type UserRole = "citizen" | "official" | "admin";
+export type UserRole = "citizen" | "department" | "admin";
 export type IssueStatus = "new" | "in_progress" | "resolved";
 export type AuditAction = "create" | "update" | "delete" | "assign";
 export type IssueType =
@@ -55,7 +55,6 @@ export interface Issue {
 	photo_url?: string;
 	created_by: string;              // references User.id
 	assigned_department?: string;    // references Department.id
-	assigned_official?: string;      // references User.id
 	created_at: string;
 	updated_at: string;
 }

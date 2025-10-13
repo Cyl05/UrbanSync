@@ -24,6 +24,11 @@ const GET_USER = gql`
       name
       role
       created_at
+      department {
+        id
+        name
+        description
+      }
     }
   }
 `;

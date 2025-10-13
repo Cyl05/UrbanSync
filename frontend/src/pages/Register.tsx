@@ -78,6 +78,11 @@ const Register: React.FC = () => {
 			const { error } = await supabase.auth.signUp({
 				email: formData.email,
 				password: formData.password,
+				options: {
+					data: {
+						role: formData.role
+					}
+				}
 			});
 
 			if (error) {
@@ -182,7 +187,7 @@ const Register: React.FC = () => {
 									Citizen - Report and view issues
 								</option>
 								<option value="official">
-									Official - Manage and resolve issues
+									Department Employee - Manage and resolve issues
 								</option>
 							</select>
 						</div>

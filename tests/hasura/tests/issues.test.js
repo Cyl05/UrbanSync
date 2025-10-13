@@ -21,7 +21,6 @@ async function testIssuesPermissions() {
           description
           status
           created_by
-          assigned_official
         }
       }
     `;

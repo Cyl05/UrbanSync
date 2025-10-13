@@ -17,8 +17,7 @@ export const GET_ISSUE_DETAILS = gql`
       updated_at
       created_by
       assigned_department
-      assigned_official
-      userByCreatedBy {
+      user {
         id
         name
         email
@@ -60,7 +59,6 @@ export const GET_ISSUE_DETAILS = gql`
 
 interface IssueDetailData {
 	issues_by_pk: Issue & {
-		userByCreatedBy?: User;
 		department?: Department;
 		user?: User;
 		comments: Array<Comment & { user?: User }>;

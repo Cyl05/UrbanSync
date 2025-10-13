@@ -39,14 +39,13 @@ const GET_DEPARTMENT_ISSUES = gql`
 `;
 
 const UPDATE_ISSUE_STATUS = gql`
-	mutation UpdateIssueStatus($issueId: uuid!, $status: String!) {
+	mutation UpdateIssueStatus($issueId: uuid!, $status: issue_status!) {
 		update_issues_by_pk(
 			pk_columns: { id: $issueId }
-			_set: { status: $status, updated_at: "now()" }
+			_set: { status: $status }
 		) {
 			id
 			status
-			updated_at
 		}
 	}
 `;
@@ -74,13 +73,21 @@ const OfficialDashboard: React.FC = () => {
 	});
 
 	const [updateIssueStatus] = useMutation(UPDATE_ISSUE_STATUS, {
-		onCompleted: () => {
+		onCompleted: (data) => {
+			console.log("Status update successful:", data);
 			refetch();
 		},
 		onError: (err: Error) => {
 			console.error("Error updating issue status:", err);
 			alert("Failed to update issue status. Please try again.");
 		},
+		refetchQueries: [
+			{
+				query: GET_DEPARTMENT_ISSUES,
+				variables: { departmentId },
+			},
+		],
+		awaitRefetchQueries: true,
 	});
 
 	const handleSignOut = async () => {
@@ -98,15 +105,24 @@ const OfficialDashboard: React.FC = () => {
 	};
 
 	const handleStatusChange = async (issueId: string, newStatus: string) => {
+		console.log("Attempting to update status:", { issueId, newStatus });
+		
 		try {
-			await updateIssueStatus({
+			const result = await updateIssueStatus({
 				variables: {
 					issueId,
 					status: newStatus,
 				},
 			});
+			
+			console.log("Mutation result:", result);
+			
+			if (result.data) {
+				console.log("Status updated successfully!");
+			}
 		} catch (err) {
 			console.error("Error updating status:", err);
+			alert("Failed to update status. Please check console for details.");
 		}
 	};
 

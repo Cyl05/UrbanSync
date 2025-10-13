@@ -1,10 +1,11 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
-import type { Issue, User, Comment, Attachment } from "../../types/schema";
+import type { Issue, User, Comment, Attachment, DepartmentUpdate, Department } from "../../types/schema";
 import CommentForm from "./CommentForm";
 
 interface IssueMainContentProps {
 	issue: Issue & {
 		comments: Array<Comment & { user?: User }>;
+		department_updates: Array<DepartmentUpdate & { user?: User & { department?: Department } }>;
 		attachments: Array<Attachment & { user?: User }>;
 	};
 	formatDate: (dateString: string) => string;

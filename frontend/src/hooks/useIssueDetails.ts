@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import type { Issue, User, Department, Comment, Attachment } from "../types/schema";
+import type { Issue, User, Department, Comment, Attachment, DepartmentUpdate } from "../types/schema";
 
 export const GET_ISSUE_DETAILS = gql`
   query GetIssueDetails($id: uuid!) {
@@ -44,6 +44,20 @@ export const GET_ISSUE_DETAILS = gql`
           role
         }
       }
+      department_updates(order_by: { created_at: desc }) {
+        id
+        content
+        created_at
+        user {
+          id
+          name
+          role
+          department {
+            id
+            name
+          }
+        }
+      }
       attachments(order_by: { created_at: asc }) {
         id
         url
@@ -62,6 +76,7 @@ interface IssueDetailData {
 		department?: Department;
 		user?: User;
 		comments: Array<Comment & { user?: User }>;
+		department_updates: Array<DepartmentUpdate & { userByAuthorId?: User & { department?: Department } }>;
 		attachments: Array<Attachment & { user?: User }>;
 	};
 }

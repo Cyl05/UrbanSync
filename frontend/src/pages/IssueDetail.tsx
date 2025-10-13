@@ -7,6 +7,7 @@ import IssueSidebar from "../components/issue/IssueSidebar";
 import { useIssueDetails } from "../hooks/useIssueDetails";
 import { formatDate } from "../utils/formatDate";
 import ErrorDisplay from "../components/ErrorDisplay";
+import DepartmentUpdates from "../components/issue/DepartmentUpdates";
 
 const IssueDetail = () => {
 	const { id } = useParams<{ id: string }>();
@@ -74,7 +75,13 @@ const IssueDetail = () => {
 						formatDate={formatDate}
 						onCommentAdded={() => refetch()}
 					/>
-					<IssueSidebar issue={issue} formatDate={formatDate} />
+					<div className="flex-column">
+						<DepartmentUpdates
+							updates={issue.department_updates}
+							formatDate={formatDate}
+						/>
+						<IssueSidebar issue={issue} formatDate={formatDate} />
+					</div>
 				</div>
 			</div>
 		</div>

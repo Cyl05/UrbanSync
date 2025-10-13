@@ -69,6 +69,15 @@ export interface Comment {
 	created_at: string;
 }
 
+// DEPARTMENT UPDATES
+export interface DepartmentUpdate {
+	id: string;
+	issue_id: string;                // references Issue.id
+	author_id: string;               // references User.id
+	content: string;
+	created_at: string;
+}
+
 // ATTACHMENTS
 export interface Attachment {
 	id: string;

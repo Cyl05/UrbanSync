@@ -1,5 +1,5 @@
 import React from "react";
-import { FaClock, FaChevronRight } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { Issue } from "../types/schema";
 import { formatDate } from "../utils/formatDate";
@@ -27,7 +27,7 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({ issue, onS
 
 	return (
 		<div 
-			className="bg-white border border-gray-200 hover:border-indigo-300 transition-all duration-200 rounded-lg overflow-hidden cursor-pointer"
+			className="bg-white border border-gray-200 hover:border-indigo-300 transition-all duration-200 rounded-lg overflow-hidden cursor-pointer px-5"
 			onClick={handleViewDetails}
 		>
 			<div className="flex items-center p-4 gap-4">
@@ -45,7 +45,7 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({ issue, onS
 				)}
 
 				<div className="flex-1 min-w-0">
-					<div className="flex items-start justify-between gap-3 mb-1">
+					<div className="flex items-start gap-3 mb-3">
 						<h3 className="text-base font-semibold text-gray-900 truncate">
 							{issue.title}
 						</h3>
@@ -75,10 +75,6 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({ issue, onS
 						<option value="in_progress">In Progress</option>
 						<option value="resolved">Resolved</option>
 					</select>
-				</div>
-
-				<div className="flex-shrink-0">
-					<FaChevronRight className="text-gray-400" />
 				</div>
 			</div>
 		</div>

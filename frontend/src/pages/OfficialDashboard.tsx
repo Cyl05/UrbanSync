@@ -127,8 +127,11 @@ const OfficialDashboard: React.FC = () => {
 	};
 
 	if (user?.role !== "department") {
-		alert("The dashboard is only accessible to department officials");
-		navigate("/login");
+		<ErrorDisplay 
+			message={"This dashboard is accessible only to department officials" }
+			handleClick={() => navigate('/')} 
+			buttonText={'Go Home'} 
+		/>
 	}
 
 	if (!departmentId) {
@@ -189,7 +192,7 @@ const OfficialDashboard: React.FC = () => {
 							</div>
 							<button
 								onClick={handleSignOut}
-								className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 shadow-sm"
+								className="flex items-center space-x-2 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
 							>
 								<FaSignOutAlt />
 								<span className="hidden sm:inline">Sign Out</span>

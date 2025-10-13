@@ -5,7 +5,7 @@ import {
 	GeoapifyContext,
 } from "@geoapify/react-geocoder-autocomplete";
 import { gql } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { useAuth } from "../hooks/useAuth";
 import { IssueCategoryLabels, type IssueType } from "../types/schema";
 
@@ -14,11 +14,12 @@ const CREATE_ISSUE = gql`
 		$title: String!
 		$description: String
 		$status: issue_status!
-		$issue_type: issue_type!
+		$issue_type: issue_category!
 		$latitude: numeric!
 		$longitude: numeric!
 		$photo_url: String
 		$created_by: uuid!
+		$department_id: uuid!
 	) {
 		insert_issues_one(
 			object: {
@@ -30,6 +31,7 @@ const CREATE_ISSUE = gql`
 				longitude: $longitude
 				photo_url: $photo_url
 				created_by: $created_by
+				assigned_department: $department_id
 			}
 		) {
 			id
@@ -42,6 +44,17 @@ const CREATE_ISSUE = gql`
 			photo_url
 			created_by
 			created_at
+			assigned_department
+		}
+	}
+`;
+
+const GET_DEPARTMENT_ISSUE_MAPPINGS = gql`
+	query GetDepartmentIssueMappings {
+		issue_type_mappings {
+			id
+			issue_type
+			department_id
 		}
 	}
 `;
@@ -65,6 +78,16 @@ interface NewIssueSidebarProps {
 	};
 }
 
+type IssueTypeMapping = {
+	id: string;
+	issue_type: IssueType;
+	department_id: string;
+};
+
+type GetDepartmentIssueMappingsData = {
+	issue_type_mappings: IssueTypeMapping[];
+};
+
 const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 	isDisplayed, 
 	onClose, 
@@ -81,6 +104,8 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 		photo_url: "",
 		issue_type: "" as IssueType | "",
 	});
+
+	const { data } = useQuery<GetDepartmentIssueMappingsData>(GET_DEPARTMENT_ISSUE_MAPPINGS);
 
 	const [createIssue, { loading, error }] = useMutation(CREATE_ISSUE, {
 		refetchQueries: ['getIssues'],
@@ -132,6 +157,8 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 			return;
 		}
 
+		const department = data?.issue_type_mappings.filter((mapping) => mapping.issue_type === formData.issue_type)[0].department_id;
+
 		try {
 			await createIssue({
 				variables: {
@@ -142,7 +169,8 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 					latitude: mapCenterCoords.latitude,
 					longitude: mapCenterCoords.longitude,
 					photo_url: formData.photo_url || null,
-					created_by: user.id
+					created_by: user.id,
+					department_id: department,
 				}
 			});
 		} catch (err) {

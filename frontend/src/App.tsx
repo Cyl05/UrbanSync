@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import UserProfile from "./pages/UserProfile";
 import OfficialDashboard from "./pages/OfficialDashboard";
 import IssueDetail from "./pages/IssueDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -16,10 +16,10 @@ function App() {
 			<Route path="/register" element={<Register />} />
 			<Route path="/issue/:id" element={<IssueDetail />} />
 			<Route
-				path="/dashboard"
+				path="/profile"
 				element={
 					<ProtectedRoute>
-						<Dashboard />
+						<UserProfile />
 					</ProtectedRoute>
 				}
 			/>

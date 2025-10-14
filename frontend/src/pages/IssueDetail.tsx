@@ -16,8 +16,8 @@ const IssueDetail = () => {
 
 	if (loading)
 		return <LoadingScreen loadingText="Loading issue details..." />;
-
 	if (error) {
+		console.error(error);
 		return (
 			<ErrorDisplay message={'Error Loading Issue'} handleClick={() => navigate(-1)} buttonText="Go Back" />
 		);

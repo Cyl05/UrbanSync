@@ -8,6 +8,7 @@ import type { Issue, User, Department, DepartmentUpdate } from "../../types/sche
 import { IssueCategoryLabels } from "../../types/schema";
 import { useNavigate } from "react-router-dom";
 import DepartmentUpdates from "./DepartmentUpdates";
+import DepartmentUpdateForm from "./DepartmentUpdateForm";
 
 interface IssueSidebarProps {
 	issue: Issue & {
@@ -23,10 +24,6 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 
 	return (
 		<div className="space-y-6 col-span-2">
-			<DepartmentUpdates
-				updates={issue.department_updates}
-				formatDate={formatDate}
-			/>
 			<div className="bg-white rounded-lg shadow-sm p-6">
 				<h2 className="text-lg font-semibold text-gray-900 mb-4">
 					Issue Details
@@ -110,6 +107,13 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 					</div>
 				</div>
 			</div>
+
+			<DepartmentUpdates
+				updates={issue.department_updates}
+				formatDate={formatDate}
+			/>
+
+			<DepartmentUpdateForm issueId={issue.id} />
 
 			<div className="bg-white rounded-lg shadow-sm p-6">
 				<h2 className="text-lg font-semibold text-gray-900 mb-4">

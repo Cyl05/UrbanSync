@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useAuth } from "../hooks/useAuth";
 import { formatDate } from "../utils/formatDate";
-import type { Issue, Department } from "../types/schema";
+import type { Issue, Department, IssueStatus } from "../types/schema";
 import LoadingScreen from "../components/LoadingScreen";
 import { FaUser, FaEnvelope, FaCalendarAlt, FaBuilding, FaArrowLeft } from "react-icons/fa";
 import OfficialIssueCard from "../components/OfficialIssueCard";
@@ -41,6 +41,7 @@ interface UserIssuesData {
 const UserProfile: React.FC = () => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
+	const [statusFilter, setStatusFilter] = useState<IssueStatus | "all">();
 
 	const { data, loading, error } = useQuery<UserIssuesData>(GET_USER_ISSUES, {
 		variables: { userId: user?.id },
@@ -80,7 +81,13 @@ const UserProfile: React.FC = () => {
 	const stats = {
 		total: issues.length,
 		resolved: issues.filter((i: Issue & { department?: Department }) => i.status === "resolved").length,
+		new: issues.filter((i: Issue & { department?: Department }) => i.status === "new").length,
+		inProgress: issues.filter((i: Issue & { department?: Department }) => i.status === "in_progress").length,
 	};
+
+	const filteredIssues = statusFilter === "all"
+		? issues 
+		: issues.filter((issue) => (issue.status === statusFilter));
 
 	return (
 		<div className="min-h-screen bg-gray-50">
@@ -169,17 +176,32 @@ const UserProfile: React.FC = () => {
 
 					<div className="lg:col-span-2">
 						<div className="bg-white rounded-lg shadow-md">
-							<div className="px-6 py-4 border-b border-gray-200">
-								<h2 className="text-xl font-bold text-gray-900">
-									All Issues
-								</h2>
-								<p className="text-sm text-gray-500 mt-1">
-									{issues.length} {issues.length === 1 ? "issue" : "issues"} found
-								</p>
+							<div className="px-6 py-4 border-b border-gray-200 flex justify-between">
+								<div>
+									<h2 className="text-xl font-bold text-gray-900">
+										All Issues
+									</h2>
+									<p className="text-sm text-gray-500 mt-1">
+										{issues.length} {issues.length === 1 ? "issue" : "issues"} found
+									</p>
+								</div>
+								<select
+									id="statusFilter"
+									value={statusFilter}
+									onChange={(e) =>
+										setStatusFilter(e.target.value as IssueStatus | "all")
+									}
+									className="flex-1 max-w-xs px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+								>
+									<option value="all">All Issues ({stats.total})</option>
+									<option value="new">New ({stats.new})</option>
+									<option value="in_progress">In Progress ({stats.inProgress})</option>
+									<option value="resolved">Resolved ({stats.resolved})</option>
+								</select>
 							</div>
 
 							<div className="divide-y divide-gray-200">
-								{issues.length === 0 ? (
+								{filteredIssues.length === 0 ? (
 									<div className="px-6 py-12 text-center">
 										<p className="text-gray-500">No issues found</p>
 									</div>

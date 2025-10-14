@@ -1,15 +1,18 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import LoadingScreen from './LoadingScreen';
+import ErrorDisplay from './ErrorDisplay';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
+    role?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
+    const { user, isAuthenticated, isLoading } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     if (isLoading) {
         return <LoadingScreen loadingText="Verifying authentication..." />;
@@ -17,6 +20,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
     if (!isAuthenticated) {
         return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+
+    if (role && user?.role !== role) {
+        return <ErrorDisplay 
+            message={'This page is not accessible'} 
+            buttonText={'Go Home'} 
+            handleClick={() => navigate('/')} 
+        />
     }
 
     return <>{children}</>;

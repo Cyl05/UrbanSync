@@ -24,7 +24,7 @@ function App() {
 				}
 			/>
 			<Route
-				path="/department/dashboard"
+				path="/dashboard"
 				element={
 					<ProtectedRoute role={'department'}>
 						<OfficialDashboard />

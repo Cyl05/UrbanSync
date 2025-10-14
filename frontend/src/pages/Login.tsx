@@ -80,7 +80,7 @@ const Login: React.FC = () => {
 				const userResult = await dispatch(fetchUser(userId)).unwrap();
 				
 				if (userResult.role === "department") {
-					navigate("/department/dashboard");
+					navigate("/dashboard");
 				} else if (userResult.role === "admin") {
 					navigate("/dashboard");
 				} else {

@@ -6,10 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import LoadingScreen from "../components/LoadingScreen";
 import OfficialIssueCard from "../components/OfficialIssueCard";
 import type { Issue, IssueStatus } from "../types/schema";
-import {
-	FaTachometerAlt,
-	FaFilter,
-} from "react-icons/fa";
+import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import ErrorDisplay from "../components/ErrorDisplay";
 import SignOut from "../components/SignOut";
 
@@ -147,7 +144,10 @@ const OfficialDashboard: React.FC = () => {
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center space-x-3">
-							<FaTachometerAlt className="text-indigo-600 text-3xl" />
+							<FaArrowLeft 
+								className="text-4xl text-gray-500 cursor-pointer hover:bg-gray-100 hover:text-gray-600 rounded-full p-2 transition-colors duration-200" 
+								onClick={() => navigate('/')} 
+							/>
 							<div>
 								<h1 className="text-2xl font-bold text-gray-900">
 									Department Dashboard

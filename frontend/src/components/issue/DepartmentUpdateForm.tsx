@@ -1,16 +1,51 @@
 import { useState } from "react";
 import { FaBullhorn } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 
 interface DepartmentUpdateFormProps {
 	issueId: string;
 }
+
+const ADD_DEPARTMENT_UPDATE = gql`
+	mutation AddDepartmentUpdate(
+		$issue_id: uuid!
+		$author_id: uuid!
+		$content: String!
+	) {
+		insert_department_updates_one(
+			object: {
+				issue_id: $issue_id
+				author_id: $author_id
+				content: $content
+			}
+		) {
+			id
+			content
+			created_at
+			user {
+				id
+				name
+				role
+				department {
+					id
+					name
+				}
+			}
+		}
+	}
+`;
 
 const DepartmentUpdateForm = ({ issueId }: DepartmentUpdateFormProps) => {
 	const [updateText, setUpdateText] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const { user } = useAuth();
+	const [addUpdate] = useMutation(ADD_DEPARTMENT_UPDATE, {
+		refetchQueries: ["GetIssueDetails"],
+		awaitRefetchQueries: true,
+	});
 
 	if (!user || user.role !== "department") {
 		return null;
@@ -27,6 +62,14 @@ const DepartmentUpdateForm = ({ issueId }: DepartmentUpdateFormProps) => {
 		setError(null);
 
 		try {
+			await addUpdate({
+				variables: {
+					issue_id: issueId,
+					author_id: user.id,
+					content: updateText.trim(),
+				},
+			});
+
 			setUpdateText("");
 		} catch (err) {
 			console.error("Error adding department update:", err);

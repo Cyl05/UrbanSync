@@ -15,21 +15,21 @@ const DepartmentUpdates: React.FC<DepartmentUpdatesProps> = ({ updates, formatDa
 	return (
 		<div className="bg-white rounded-lg shadow-sm p-6 mb-5">
 			<h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-				<FaBullhorn className="text-blue-500" /> Department Updates
+				<FaBullhorn className="text-indigo-500" /> Department Updates
 			</h2>
 			<div className="space-y-4">
 				{updates.map((update) => (
 					<div
 						key={update.id}
-						className="bg-blue-50 px-5 py-4 rounded-lg border-l-4 border-blue-500"
+						className="bg-indigo-50 px-5 py-4 rounded-lg border-l-4 border-indigo-500"
 					>
-						<div className="flex items-start justify-between mb-2 pb-2 border-b border-blue-200">
+						<div className="flex items-start justify-between mb-2 pb-2 border-b border-indigo-200">
 							<div className="flex flex-col gap-1">
 								<div>
 									<span className="font-semibold text-gray-900">
 										{update.user?.name || "Unknown User"}
 									</span> <br></br>
-                                    <span className="text-xs px-2 py-1 bg-blue-600 text-white rounded font-medium">
+                                    <span className="text-xs px-2 py-1 bg-indigo-600 text-white rounded font-medium">
                                         {update.user?.department?.name}
                                     </span>
 								</div>

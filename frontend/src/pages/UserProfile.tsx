@@ -8,6 +8,7 @@ import type { Issue, Department } from "../types/schema";
 import LoadingScreen from "../components/LoadingScreen";
 import { FaUser, FaEnvelope, FaCalendarAlt, FaBuilding, FaArrowLeft } from "react-icons/fa";
 import OfficialIssueCard from "../components/OfficialIssueCard";
+import SignOut from "../components/SignOut";
 
 const GET_USER_ISSUES = gql`
 	query GetUserIssues($userId: uuid!) {
@@ -94,7 +95,7 @@ const UserProfile: React.FC = () => {
 							<span>Back to Map</span>
 						</button>
 						<h1 className="text-2xl font-bold text-gray-900">User Profile</h1>
-						Sign Out
+						<SignOut />
 					</div>
 				</div>
 			</div>

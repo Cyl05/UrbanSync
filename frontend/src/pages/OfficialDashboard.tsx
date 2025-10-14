@@ -2,19 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useQuery, useMutation } from "@apollo/client/react";
-import { supabase } from "../lib/supabaseClient";
-import { useAppDispatch } from "../store/hooks";
-import { clearUser } from "../store/userSlice";
 import { useAuth } from "../hooks/useAuth";
 import LoadingScreen from "../components/LoadingScreen";
 import OfficialIssueCard from "../components/OfficialIssueCard";
 import type { Issue, IssueStatus } from "../types/schema";
 import {
-	FaSignOutAlt,
 	FaTachometerAlt,
 	FaFilter,
 } from "react-icons/fa";
 import ErrorDisplay from "../components/ErrorDisplay";
+import SignOut from "../components/SignOut";
 
 const GET_DEPARTMENT_ISSUES = gql`
 	query GetDepartmentIssues($departmentId: uuid!) {
@@ -56,7 +53,6 @@ type GetDepartmentIssuesData = {
 
 const OfficialDashboard: React.FC = () => {
 	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
 	const { user } = useAuth();
 	const [statusFilter, setStatusFilter] = useState<IssueStatus | "all">("all");
 
@@ -89,20 +85,6 @@ const OfficialDashboard: React.FC = () => {
 		],
 		awaitRefetchQueries: true,
 	});
-
-	const handleSignOut = async () => {
-		try {
-			const { error } = await supabase.auth.signOut();
-			if (error) {
-				console.error("Error signing out:", error.message);
-				return;
-			}
-			dispatch(clearUser());
-			navigate("/");
-		} catch (err) {
-			console.error("Unexpected error during sign out:", err);
-		}
-	};
 
 	const handleStatusChange = async (issueId: string, newStatus: string) => {
 		console.log("Attempting to update status:", { issueId, newStatus });
@@ -190,13 +172,7 @@ const OfficialDashboard: React.FC = () => {
 								<p className="text-sm font-medium text-gray-900">{user.name}</p>
 								<p className="text-xs text-gray-500">{user.email}</p>
 							</div>
-							<button
-								onClick={handleSignOut}
-								className="flex items-center space-x-2 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
-							>
-								<FaSignOutAlt />
-								<span className="hidden sm:inline">Sign Out</span>
-							</button>
+							<SignOut />
 						</div>
 					</div>
 				</div>

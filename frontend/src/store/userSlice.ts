@@ -29,6 +29,7 @@ const GET_USER = gql`
         name
         description
       }
+      profile_picture
     }
   }
 `;

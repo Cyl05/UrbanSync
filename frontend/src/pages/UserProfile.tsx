@@ -41,7 +41,7 @@ interface UserIssuesData {
 const UserProfile: React.FC = () => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
-	const [statusFilter, setStatusFilter] = useState<IssueStatus | "all">();
+	const [statusFilter, setStatusFilter] = useState<IssueStatus | "all">("all");
 
 	const { data, loading, error } = useQuery<UserIssuesData>(GET_USER_ISSUES, {
 		variables: { userId: user?.id },
@@ -89,6 +89,7 @@ const UserProfile: React.FC = () => {
 		? issues 
 		: issues.filter((issue) => (issue.status === statusFilter));
 
+	
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="bg-white shadow-sm border-b border-gray-200">
@@ -112,9 +113,17 @@ const UserProfile: React.FC = () => {
 					<div className="lg:col-span-1">
 						<div className="bg-white rounded-lg shadow-md p-6">
 							<div className="text-center mb-6">
-								<div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-									<FaUser className="text-indigo-600 text-4xl" />
-								</div>
+								{ user.profile_picture ? (
+										<img 
+											src={user.profile_picture}
+											className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4"
+										/>
+									) : (
+										<div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+											<FaUser className="text-indigo-600 text-4xl" />
+										</div>
+									)
+								}
 								<h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
 								<span className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium ${
 									user.role === "admin" 
@@ -206,8 +215,8 @@ const UserProfile: React.FC = () => {
 										<p className="text-gray-500">No issues found</p>
 									</div>
 								) : (
-									issues.map((issue: Issue & { department?: Department }) => (
-										<OfficialIssueCard issue={issue} />
+									filteredIssues.map((issue: Issue & { department?: Department }) => (
+										<OfficialIssueCard key={issue.id} issue={issue} />
 									))
 								)}
 							</div>

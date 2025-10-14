@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import LoadingScreen from "../components/LoadingScreen";
-import IssueStatusBadge from "../components/issue/IssueStatusBadge";
-import IssueMainContent from "../components/issue/IssueMainContent";
-import IssueSidebar from "../components/issue/IssueSidebar";
+import IssueStatusBadge from "../features/issue/IssueStatusBadge";
+import IssueMainContent from "../features/issue/IssueMainContent";
+import IssueSidebar from "../features/issue/IssueSidebar";
 import { useIssueDetails } from "../hooks/useIssueDetails";
 import { formatDate } from "../utils/formatDate";
 import ErrorDisplay from "../components/ErrorDisplay";

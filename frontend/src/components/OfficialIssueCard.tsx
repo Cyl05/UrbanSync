@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import type { Department, Issue } from "../types/schema";
 import { formatDate } from "../utils/formatDate";
-import IssueStatusBadge from "./issue/IssueStatusBadge";
+import IssueStatusBadge from "../features/issue/IssueStatusBadge";
 import { IssueCategoryLabels } from "../types/schema";
 import { FaBuilding, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 

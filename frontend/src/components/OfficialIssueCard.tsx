@@ -19,6 +19,13 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({
 }) => {
 	const navigate = useNavigate();
 
+	const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		e.stopPropagation();
+		if (onStatusChange) {
+			onStatusChange(issue.id, e.target.value);
+		}
+	};
+
 	return (
 		<div
 			key={issue.id}
@@ -32,6 +39,18 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({
 							{issue.title}
 						</h3>
 						<IssueStatusBadge status={issue.status} />
+						{onStatusChange && (
+							<select
+								value={issue.status}
+								onChange={handleStatusChange}
+								onClick={(e) => e.stopPropagation()}
+								className="ml-2 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							>
+								<option value="new">New</option>
+								<option value="in_progress">In Progress</option>
+								<option value="resolved">Resolved</option>
+							</select>
+						)}
 					</div>
 
 					{issue.description && (

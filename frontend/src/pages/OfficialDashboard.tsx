@@ -69,8 +69,7 @@ const OfficialDashboard: React.FC = () => {
 	});
 
 	const [updateIssueStatus] = useMutation(UPDATE_ISSUE_STATUS, {
-		onCompleted: (data) => {
-			console.log("Status update successful:", data);
+		onCompleted: () => {
 			refetch();
 		},
 		onError: (err: Error) => {
@@ -87,21 +86,13 @@ const OfficialDashboard: React.FC = () => {
 	});
 
 	const handleStatusChange = async (issueId: string, newStatus: string) => {
-		console.log("Attempting to update status:", { issueId, newStatus });
-		
 		try {
-			const result = await updateIssueStatus({
+			await updateIssueStatus({
 				variables: {
 					issueId,
 					status: newStatus,
 				},
 			});
-			
-			console.log("Mutation result:", result);
-			
-			if (result.data) {
-				console.log("Status updated successfully!");
-			}
 		} catch (err) {
 			console.error("Error updating status:", err);
 			alert("Failed to update status. Please check console for details.");

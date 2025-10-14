@@ -1,6 +1,7 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
 import type { Issue, User, Comment, Attachment, DepartmentUpdate, Department } from "../../types/schema";
 import CommentForm from "./CommentForm";
+import type React from "react";
 
 interface IssueMainContentProps {
 	issue: Issue & {
@@ -9,14 +10,13 @@ interface IssueMainContentProps {
 		attachments: Array<Attachment & { user?: User }>;
 	};
 	formatDate: (dateString: string) => string;
-	onCommentAdded?: () => void;
 }
 
-const IssueMainContent = ({ issue, formatDate, onCommentAdded }: IssueMainContentProps) => {
+const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }) => {
 	return (
 		<div className="lg:col-span-2 space-y-6">
 			{issue.photo_url && (
-				<div className="bg-white rounded-lg shadow-sm overflow-hidden">
+				<div className="rounded-lg shadow-sm overflow-hidden">
 					<img
 						src={issue.photo_url}
 						alt={issue.title}
@@ -112,7 +112,6 @@ const IssueMainContent = ({ issue, formatDate, onCommentAdded }: IssueMainConten
 
 			<CommentForm
 				issueId={issue.id}
-				onCommentAdded={onCommentAdded}
 			/>
 
 			{issue.attachments && issue.attachments.length > 0 && (

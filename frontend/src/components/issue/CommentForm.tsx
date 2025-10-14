@@ -6,7 +6,6 @@ import { gql } from "@apollo/client";
 
 interface CommentFormProps {
 	issueId: string;
-	onCommentAdded?: () => void;
 }
 
 const ADD_COMMENT = gql`
@@ -25,18 +24,25 @@ const ADD_COMMENT = gql`
         id
         name
         role
+        department {
+          id
+          name
+        }
       }
     }
   }
 `;
 
 
-const CommentForm = ({ issueId, onCommentAdded }: CommentFormProps) => {
+const CommentForm = ({ issueId }: CommentFormProps) => {
 	const [commentText, setCommentText] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const { user } = useAuth();
-	const [addComment] = useMutation(ADD_COMMENT);
+	const [addComment] = useMutation(ADD_COMMENT, {
+		refetchQueries: ['GetIssueDetails'],
+		awaitRefetchQueries: true,
+	});
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -63,10 +69,6 @@ const CommentForm = ({ issueId, onCommentAdded }: CommentFormProps) => {
 			});
 
 			setCommentText("");
-			
-			if (onCommentAdded) {
-				onCommentAdded();
-			}
 		} catch (err) {
 			console.error("Error adding comment:", err);
 			setError("Failed to add comment. Please try again.");
@@ -109,7 +111,7 @@ const CommentForm = ({ issueId, onCommentAdded }: CommentFormProps) => {
 					<button
 						type="submit"
 						disabled={!commentText.trim() || isSubmitting || !user}
-						className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+						className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 					>
 						{isSubmitting ? (
 							<>

@@ -13,7 +13,7 @@ const IssueDetail = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 
-	const { data, loading, error, refetch } = useIssueDetails(id);
+	const { data, loading, error } = useIssueDetails(id);
 
 	if (loading)
 		return <LoadingScreen loadingText="Loading issue details..." />;
@@ -73,9 +73,8 @@ const IssueDetail = () => {
 					<IssueMainContent 
 						issue={issue} 
 						formatDate={formatDate}
-						onCommentAdded={() => refetch()}
 					/>
-					<div className="flex-column">
+					<div>
 						<DepartmentUpdates
 							updates={issue.department_updates}
 							formatDate={formatDate}

@@ -3,7 +3,7 @@ import { FaBullhorn } from "react-icons/fa";
 import type { DepartmentUpdate, User, Department } from "../../types/schema";
 
 interface DepartmentUpdatesProps {
-	updates: Array<DepartmentUpdate & { user?: User & { department?: Department } }>;
+	updates?: Array<DepartmentUpdate & { user?: User & { department?: Department } }>;
 	formatDate: (dateString: string) => string;
 }
 

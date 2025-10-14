@@ -7,7 +7,6 @@ import IssueSidebar from "../components/issue/IssueSidebar";
 import { useIssueDetails } from "../hooks/useIssueDetails";
 import { formatDate } from "../utils/formatDate";
 import ErrorDisplay from "../components/ErrorDisplay";
-import DepartmentUpdates from "../components/issue/DepartmentUpdates";
 
 const IssueDetail = () => {
 	const { id } = useParams<{ id: string }>();
@@ -69,18 +68,12 @@ const IssueDetail = () => {
 			</div>
 
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 					<IssueMainContent 
 						issue={issue} 
 						formatDate={formatDate}
 					/>
-					<div>
-						<DepartmentUpdates
-							updates={issue.department_updates}
-							formatDate={formatDate}
-						/>
-						<IssueSidebar issue={issue} formatDate={formatDate} />
-					</div>
+					<IssueSidebar issue={issue} formatDate={formatDate} />
 				</div>
 			</div>
 		</div>

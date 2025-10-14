@@ -1,12 +1,11 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
-import type { Issue, User, Comment, Attachment, DepartmentUpdate, Department } from "../../types/schema";
+import type { Issue, User, Comment, Attachment } from "../../types/schema";
 import CommentForm from "./CommentForm";
 import type React from "react";
 
 interface IssueMainContentProps {
 	issue: Issue & {
 		comments: Array<Comment & { user?: User }>;
-		department_updates: Array<DepartmentUpdate & { user?: User & { department?: Department } }>;
 		attachments: Array<Attachment & { user?: User }>;
 	};
 	formatDate: (dateString: string) => string;
@@ -14,7 +13,7 @@ interface IssueMainContentProps {
 
 const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }) => {
 	return (
-		<div className="lg:col-span-2 space-y-6">
+		<div className="lg:col-span-3 space-y-6">
 			{issue.photo_url && (
 				<div className="rounded-lg shadow-sm overflow-hidden">
 					<img

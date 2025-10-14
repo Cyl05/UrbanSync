@@ -23,7 +23,7 @@ export interface User {
 	role: UserRole;
 	created_at: string;
 	department?: Department;
-	profile_picture: string;
+	profile_picture?: string;
 }
 
 // DEPARTMENTS

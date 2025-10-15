@@ -2,7 +2,7 @@ import { FaCheckCircle, FaExclamationCircle, FaSpinner } from "react-icons/fa";
 import type { IssueStatus } from "../../types/schema";
 
 interface IssueStatusBadgeProps {
-	status: IssueStatus;
+	status: IssueStatus | string;
 }
 
 const IssueStatusBadge = ({ status }: IssueStatusBadgeProps) => {

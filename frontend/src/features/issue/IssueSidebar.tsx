@@ -9,6 +9,7 @@ import { IssueCategoryLabels } from "../../types/schema";
 import { useNavigate } from "react-router-dom";
 import DepartmentUpdates from "./DepartmentUpdates";
 import DepartmentUpdateForm from "./DepartmentUpdateForm";
+import { useAuth } from "../../hooks/useAuth";
 
 interface IssueSidebarProps {
 	issue: Issue & {
@@ -21,6 +22,7 @@ interface IssueSidebarProps {
 }
 const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 	const navigate = useNavigate();
+	const { user } = useAuth();
 
 	return (
 		<div className="space-y-6 col-span-2">
@@ -75,7 +77,7 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 						<div>
 							<div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
 								<FaUser />
-								<span>Assigned Official</span>
+								<span>Reported By:</span>
 							</div>
 							<p className="text-gray-900 font-medium">
 								{issue.user.name}
@@ -113,7 +115,9 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 				formatDate={formatDate}
 			/>
 
-			<DepartmentUpdateForm issueId={issue.id} />
+			{ issue.department?.id === user?.department?.id && (
+				<DepartmentUpdateForm issueId={issue.id} />
+			)}
 
 			<div className="bg-white rounded-lg shadow-sm p-6">
 				<h2 className="text-lg font-semibold text-gray-900 mb-4">

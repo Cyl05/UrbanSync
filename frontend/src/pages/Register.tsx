@@ -6,10 +6,23 @@ import {
 	FaEnvelope,
 	FaLock,
 	FaUserPlus,
+	FaBuilding,
 } from "react-icons/fa";
-import type { UserRole } from "../types/schema";
+import { useQuery } from "@apollo/client/react";
+import { gql } from "@apollo/client";
+import type { UserRole, Department } from "../types/schema";
 import { supabase } from "../lib/supabaseClient";
 import WideButton from "../components/WideButton";
+
+const GET_DEPARTMENTS = gql`
+	query GetDepartments {
+		departments(order_by: { name: asc }) {
+			id
+			name
+			description
+		}
+	}
+`;
 
 const Register: React.FC = () => {
 	const [formData, setFormData] = useState({
@@ -17,11 +30,16 @@ const Register: React.FC = () => {
 		password: "",
 		confirmPassword: "",
 		role: "citizen" as UserRole,
+		departmentId: "",
 	});
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+	const { data: departmentsData, loading: departmentsLoading } = useQuery<{
+		departments: Department[];
+	}>(GET_DEPARTMENTS);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -61,6 +79,10 @@ const Register: React.FC = () => {
 			newErrors.confirmPassword = "Passwords do not match";
 		}
 
+		if (formData.role === "department" && !formData.departmentId) {
+			newErrors.departmentId = "Please select a department";
+		}
+
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
@@ -80,13 +102,13 @@ const Register: React.FC = () => {
 				password: formData.password,
 				options: {
 					data: {
-						role: formData.role
+						role: formData.role,
+						department_id: formData.role === "department" ? formData.departmentId : null
 					}
 				}
 			});
 
 			if (error) {
-				// Provide specific error messages based on error type
 				let errorMessage = "Registration failed. Please try again.";
 				
 				if (error.message.toLowerCase().includes("already registered")) {
@@ -191,6 +213,48 @@ const Register: React.FC = () => {
 								</option>
 							</select>
 						</div>
+
+						{formData.role === "department" && (
+							<div>
+								<label
+									htmlFor="departmentId"
+									className="block text-sm font-medium text-gray-700 mb-1"
+								>
+									Department
+								</label>
+								<div className="relative">
+									<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+										<FaBuilding className="h-4 w-4 text-gray-400" />
+									</div>
+									<select
+										id="departmentId"
+										name="departmentId"
+										value={formData.departmentId}
+										onChange={handleInputChange}
+										disabled={departmentsLoading}
+										className={`block w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
+											errors.departmentId
+												? "border-red-300 bg-red-50"
+												: "border-gray-300 bg-white hover:border-gray-400"
+										} ${departmentsLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+									>
+										<option value="">
+											{departmentsLoading ? "Loading departments..." : "Select a department"}
+										</option>
+										{departmentsData?.departments.map((dept) => (
+											<option key={dept.id} value={dept.id}>
+												{dept.name}
+											</option>
+										))}
+									</select>
+								</div>
+								{errors.departmentId && (
+									<p className="mt-1 text-sm text-red-600">
+										{errors.departmentId}
+									</p>
+								)}
+							</div>
+						)}
 
 						<div>
 							<label

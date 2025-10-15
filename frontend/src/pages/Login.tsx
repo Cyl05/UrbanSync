@@ -8,13 +8,12 @@ import {
 	FaSignInAlt,
 } from "react-icons/fa";
 import { supabase } from "../lib/supabaseClient";
-import { useAppDispatch } from "../store/hooks";
-import { fetchUser } from "../store/userSlice";
+import { useAuth } from "../hooks/useAuth";
 import WideButton from "../components/WideButton";
 
 const Login: React.FC = () => {
 	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
+	const { user: currentUser, error: userError } = useAuth();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -55,6 +54,26 @@ const Login: React.FC = () => {
 		return Object.keys(newErrors).length === 0;
 	};
 
+	React.useEffect(() => {
+		if (currentUser) {
+			setIsLoading(false);
+			if (currentUser.role === "department") {
+				navigate("/department/dashboard");
+			} else {
+				navigate("/");
+			}
+		}
+	}, [currentUser, navigate]);
+
+	React.useEffect(() => {
+		if (userError) {
+			setErrors({
+				general: userError,
+			});
+			setIsLoading(false);
+		}
+	}, [userError]);
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -65,7 +84,7 @@ const Login: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			const { data, error: authError } = await supabase.auth.signInWithPassword({ 
+			const { error: authError } = await supabase.auth.signInWithPassword({ 
 				email: formData.email, 
 				password: formData.password
 			});
@@ -73,26 +92,12 @@ const Login: React.FC = () => {
 			if (authError) {
 				throw authError;
 			}
-
-			const userId = data.session?.user.id;
 			
-			if (userId) {
-				const userResult = await dispatch(fetchUser(userId)).unwrap();
-				
-				if (userResult.role === "department") {
-					navigate("/dashboard");
-				} else if (userResult.role === "admin") {
-					navigate("/dashboard");
-				} else {
-					navigate("/");
-				}
-			}
 		} catch (error) {
 			console.error("Login error:", error);
 			setErrors({
 				general: "Invalid email or password. Please try again.",
 			});
-		} finally {
 			setIsLoading(false);
 		}
 	};

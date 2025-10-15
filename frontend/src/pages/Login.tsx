@@ -58,7 +58,7 @@ const Login: React.FC = () => {
 		if (currentUser) {
 			setIsLoading(false);
 			if (currentUser.role === "department") {
-				navigate("/department/dashboard");
+				navigate("/dashboard");
 			} else {
 				navigate("/");
 			}
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
 			if (authError) {
 				throw authError;
 			}
-			
+
 		} catch (error) {
 			console.error("Login error:", error);
 			setErrors({

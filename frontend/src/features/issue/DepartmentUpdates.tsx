@@ -23,8 +23,13 @@ const DepartmentUpdates: React.FC<DepartmentUpdatesProps> = ({ updates, formatDa
 						key={update.id}
 						className="bg-indigo-50 px-5 py-4 rounded-lg border-l-4 border-indigo-500"
 					>
-						<div className="flex items-start justify-between mb-2 pb-2 border-b border-indigo-200">
-							<div className="flex flex-col gap-1">
+						<div className="flex mb-2 pb-2 border-b border-indigo-200 items-center">
+							<img 
+								className="w-6 h-6 rounded-full object-cover" 
+								src={update.user?.profile_picture} 
+								alt={update.user?.name || "User avatar"}
+							/>
+							<div className="flex flex-col gap-1 ml-2">
 								<div>
 									<span className="font-semibold text-gray-900">
 										{update.user?.name || "Unknown User"}

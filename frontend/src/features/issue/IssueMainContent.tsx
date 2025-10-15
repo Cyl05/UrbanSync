@@ -76,20 +76,24 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 			{issue.comments && issue.comments.length > 0 && (
 				<div className="bg-white rounded-lg shadow-sm p-6">
 					<h2 className="text-xl font-semibold text-gray-900 mb-4">
-						Activity & Comments
+						Comments
 					</h2>
 					<div className="space-y-4">
 						{issue.comments.map((comment) => (
 							<div
 								key={comment.id}
-								className="bg-indigo-100 px-5 py-2 rounded-t-md rounded-r-md"
+								className="bg-indigo-100 px-5 py-2 rounded-t-md rounded-r-md border-l-4 border-indigo-500"
 							>
 								<div className="flex items-center justify-between mb-2 border-b-2 border-gray-400">
-									<div className="flex items-center gap-2">
-										<span className="font-medium text-gray-900">
-											{comment.user?.name ||
-												"Unknown User"}
-										</span>
+									<div className="flex items-center gap-2 mb-1">
+										<img 
+											src={comment.user?.profile_picture}
+											className="w-6 rounded-full" 
+											alt={comment.user?.name || "User avatar"}
+										/>
+										<strong>{comment.user?.name ||
+											"Unknown User"}
+										</strong>
 										{comment.user?.role && (
 											<span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
 												{comment.user.role}

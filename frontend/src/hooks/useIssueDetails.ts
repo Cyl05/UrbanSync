@@ -42,6 +42,7 @@ export const GET_ISSUE_DETAILS = gql`
           id
           name
           role
+          profile_picture
         }
       }
       department_updates(order_by: { created_at: desc }) {
@@ -52,6 +53,7 @@ export const GET_ISSUE_DETAILS = gql`
           id
           name
           role
+          profile_picture
           department {
             id
             name

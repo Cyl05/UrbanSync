@@ -7,11 +7,19 @@ const createApolloClient = () => {
 
     const httpLink = new HttpLink({ uri: import.meta.env.VITE_HASURA_GRAPHQL_URL });
     const authLink = new ApolloLink((operation, forward) => {
-        operation.setContext({
-            headers: {
-                Authorization: access_token ? `Bearer ${access_token}` : '',
-            },
-        });
+        if (access_token) {
+            operation.setContext({
+                headers: {
+                    Authorization:`Bearer ${access_token}`,
+                },
+            });
+        } else {
+            operation.setContext({
+                headers: {
+                    'x-hasura-role': 'anonymous'
+                },
+            });
+        }
         return forward(operation);
     });
 

@@ -1,6 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaMapMarkerAlt, FaUser, FaTachometerAlt } from "react-icons/fa";
+import {
+	FaMapMarkerAlt,
+	FaUser,
+	FaTachometerAlt,
+	FaUserPlus,
+} from "react-icons/fa";
 import { TbMapPinExclamation } from "react-icons/tb";
 import NewIssueSidebar from "./NewIssueSidebar";
 import { useAuth } from "../hooks/useAuth";
@@ -30,7 +35,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 	handlePlaceSelect,
 	isMapPinMode,
 	setIsMapPinMode,
-	mapCenterCoords
+	mapCenterCoords,
 }) => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
@@ -43,31 +48,42 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 			</div>
 
 			<div className="flex space-x-2">
-			{
-				user?.role === 'department' && (
+				{!user ? (
+					<button
+						className="bg-indigo-600/90 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
+						onClick={() => navigate("/login")}
+					>
+						<FaUserPlus />
+						<span>Login</span>
+					</button>
+				) : (
+					<>
+						<Link
+							to="/profile"
+							className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
+						>
+							<FaUser />
+							<span>Profile</span>
+						</Link>
+						<button
+							className="bg-indigo-600/90 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
+							onClick={() => setDisplaySidebar((prev) => !prev)}
+						>
+							<TbMapPinExclamation />
+							<span>New Issue</span>
+						</button>
+					</>
+				)}
+
+				{user?.role === "department" && (
 					<button
 						className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
-						onClick={() => navigate('/dashboard')}
+						onClick={() => navigate("/dashboard")}
 					>
 						<FaTachometerAlt />
 						<span>Dashboard</span>
 					</button>
-				)
-			}
-			<Link
-				to="/profile"
-				className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
-			>
-				<FaUser />
-				<span>Profile</span>
-			</Link>
-			<button
-				className="bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
-				onClick={() => setDisplaySidebar((prev) => !prev)}
-			>
-				<TbMapPinExclamation />
-				<span>New Issue</span>
-			</button>
+				)}
 			</div>
 			<NewIssueSidebar
 				isDisplayed={displaySidebar}

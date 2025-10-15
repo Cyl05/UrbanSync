@@ -126,7 +126,7 @@ const Map = () => {
 
 	if (loading) return <LoadingScreen loadingText="Loading map and issues..." />;
 	if (error) {
-		if (error.message.startsWith("Malformd")) {
+		if (error.message.startsWith("Malformed")) {
 			return <ErrorDisplay message={error.message} handleClick={() => navigate('/login')} buttonText={'Login'} />
 		} else {
 			return <ErrorDisplay message={error.message} handleClick={() => window.location.reload()} buttonText={'Reload'} />

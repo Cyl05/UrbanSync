@@ -354,7 +354,7 @@ const Register: React.FC = () => {
 							)}
 						</div>
 
-						<WideButton text={'Create Account'} isLoading={isLoading} isSubmit={true} />
+						<WideButton text={'Create Account'} isLoading={isLoading} isSubmit={true} loadingText={'Creating account...'} />
 					</div>
 
 					<div className="text-center">

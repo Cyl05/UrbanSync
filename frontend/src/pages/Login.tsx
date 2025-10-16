@@ -205,7 +205,7 @@ const Login: React.FC = () => {
 						</div>
 						<br />
 
-						<WideButton text="Login" isLoading={isLoading} isSubmit={true} />
+						<WideButton text="Login" isLoading={isLoading} isSubmit={true} loadingText={'Logging in...'} />
 					</div>
 
 					<div className="text-center">

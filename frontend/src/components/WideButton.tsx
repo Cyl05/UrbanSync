@@ -4,9 +4,10 @@ interface WideButtonProps {
 	isLoading?: boolean;
 	text: string;
     isSubmit?: boolean;
+	loadingText?: string;
 }
 
-const WideButton: React.FC<WideButtonProps> = ({ isLoading, text, isSubmit }) => {
+const WideButton: React.FC<WideButtonProps> = ({ isLoading, text, isSubmit, loadingText }) => {
 	return (
 		<button
 			type={isSubmit ? "submit" : "button"}
@@ -16,7 +17,7 @@ const WideButton: React.FC<WideButtonProps> = ({ isLoading, text, isSubmit }) =>
 			{isLoading && isLoading ? (
 				<div className="flex items-center">
 					<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-					Creating account...
+					{loadingText || "Loading..."}
 				</div>
 			) : (
 				text

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import LoadingScreen from './LoadingScreen';
 import ErrorDisplay from './ErrorDisplay';
@@ -11,7 +11,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const location = useLocation();
     const navigate = useNavigate();
 
     if (isLoading) {
@@ -19,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/login" />;
     }
 
     if (role && user?.role !== role) {

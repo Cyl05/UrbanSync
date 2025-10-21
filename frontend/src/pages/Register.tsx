@@ -153,7 +153,10 @@ const Register: React.FC = () => {
 				<form className="mt-8 space-y-6" onSubmit={handleSubmit}>
 					<div className="bg-white rounded-lg shadow-md p-6 space-y-4">
 						{errors.general && (
-							<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+							<div 
+								data-testid="error-message"
+								className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm"
+							>
 								{errors.general}
 							</div>
 						)}
@@ -174,6 +177,7 @@ const Register: React.FC = () => {
 									name="email"
 									type="email"
 									autoComplete="email"
+									data-testid="email-input"
 									value={formData.email}
 									onChange={handleInputChange}
 									className={`block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
@@ -201,6 +205,7 @@ const Register: React.FC = () => {
 							<select
 								id="role"
 								name="role"
+								data-testid="role-select"
 								value={formData.role}
 								onChange={handleInputChange}
 								className="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md focus:ring-2 focus:ring-indigo-500 transition duration-200"
@@ -229,6 +234,7 @@ const Register: React.FC = () => {
 									<select
 										id="departmentId"
 										name="departmentId"
+										data-testid="department-select"
 										value={formData.departmentId}
 										onChange={handleInputChange}
 										disabled={departmentsLoading}
@@ -272,6 +278,7 @@ const Register: React.FC = () => {
 									name="password"
 									type={showPassword ? "text" : "password"}
 									autoComplete="new-password"
+									data-testid="password-input"
 									value={formData.password}
 									onChange={handleInputChange}
 									className={`block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
@@ -322,6 +329,7 @@ const Register: React.FC = () => {
 											: "password"
 									}
 									autoComplete="new-password"
+									data-testid="confirm-password-input"
 									value={formData.confirmPassword}
 									onChange={handleInputChange}
 									className={`block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
@@ -354,7 +362,9 @@ const Register: React.FC = () => {
 							)}
 						</div>
 
-						<WideButton text={'Create Account'} isLoading={isLoading} isSubmit={true} loadingText={'Creating account...'} />
+						<div data-testid="submit-button">
+							<WideButton text={'Create Account'} isLoading={isLoading} isSubmit={true} loadingText={'Creating account...'} />
+						</div>
 					</div>
 
 					<div className="text-center">

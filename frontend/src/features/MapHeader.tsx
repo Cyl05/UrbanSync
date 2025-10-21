@@ -52,6 +52,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 					<button
 						className="bg-indigo-600/90 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
 						onClick={() => navigate("/login")}
+						data-test="login-button"
 					>
 						<FaUserPlus />
 						<span>Login</span>

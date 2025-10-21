@@ -120,7 +120,10 @@ const Login: React.FC = () => {
 				<form className="mt-8 space-y-6" onSubmit={handleSubmit}>
 					<div className="bg-white rounded-lg shadow-md p-6 space-y-4">
 						{errors.general && (
-							<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+							<div 
+								data-testid="error-message"
+								className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm"
+							>
 								{errors.general}
 							</div>
 						)}
@@ -141,6 +144,7 @@ const Login: React.FC = () => {
 									name="email"
 									type="email"
 									autoComplete="email"
+									data-testid="email-input"
 									value={formData.email}
 									onChange={handleInputChange}
 									className={`block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
@@ -174,6 +178,7 @@ const Login: React.FC = () => {
 									name="password"
 									type={showPassword ? "text" : "password"}
 									autoComplete="current-password"
+									data-testid="password-input"
 									value={formData.password}
 									onChange={handleInputChange}
 									className={`block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ${
@@ -205,7 +210,9 @@ const Login: React.FC = () => {
 						</div>
 						<br />
 
-						<WideButton text="Login" isLoading={isLoading} isSubmit={true} loadingText={'Logging in...'} />
+						<div data-testid="submit-button">
+							<WideButton text="Login" isLoading={isLoading} isSubmit={true} loadingText={'Logging in...'} />
+						</div>
 					</div>
 
 					<div className="text-center">

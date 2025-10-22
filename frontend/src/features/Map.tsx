@@ -150,6 +150,7 @@ const Map = () => {
 					scrollWheelZoom={true}
 					zoomControl={false}
 					className="cursor-pointer"
+		            data-testid="main-map"
 				>
 					<RecenterMap
 						latitude={centerCoords.latitude}
@@ -179,6 +180,7 @@ const Map = () => {
 					{displaySidebar && !isMapPinMode && tempMarker.latitude && tempMarker.longitude && (
 						<Marker
 							position={[tempMarker.latitude, tempMarker.longitude]}
+							data-testid="temp-marker"
 						/>
 					)}
 				</MapContainer>

@@ -52,7 +52,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 					<button
 						className="bg-indigo-600/90 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
 						onClick={() => navigate("/login")}
-						data-test="login-button"
+						data-testid="login-button"
 					>
 						<FaUserPlus />
 						<span>Login</span>
@@ -62,6 +62,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 						<Link
 							to="/profile"
 							className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
+							data-testid={'profile-button'}
 						>
 							<FaUser />
 							<span>Profile</span>
@@ -69,6 +70,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 						<button
 							className="bg-indigo-600/90 hover:bg-indigo-700 transition-colors duration-200 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium cursor-pointer"
 							onClick={() => setDisplaySidebar((prev) => !prev)}
+							data-testid={'new-issue-button'}
 						>
 							<TbMapPinExclamation />
 							<span>New Issue</span>

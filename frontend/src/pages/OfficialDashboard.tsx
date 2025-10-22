@@ -139,20 +139,22 @@ const OfficialDashboard: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-gray-50" data-testid="department-dashboard">
 			<header className="bg-white shadow-md border-b border-gray-200">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center space-x-3">
-							<FaArrowLeft 
-								className="text-4xl text-gray-500 cursor-pointer hover:bg-gray-100 hover:text-gray-600 rounded-full p-2 transition-colors duration-200" 
-								onClick={() => navigate('/')} 
-							/>
+							<div data-testid="back-to-map-button">
+								<FaArrowLeft 
+									className="text-4xl text-gray-500 cursor-pointer hover:bg-gray-100 hover:text-gray-600 rounded-full p-2 transition-colors duration-200" 
+									onClick={() => navigate('/')}
+								/>
+							</div>
 							<div>
 								<h1 className="text-2xl font-bold text-gray-900">
 									Department Dashboard
 								</h1>
-								<p className="text-sm text-gray-600">
+								<p className="text-sm text-gray-600" data-testid="department-name">
 									{user.department?.name || "Unknown Department"}
 								</p>
 							</div>
@@ -171,52 +173,52 @@ const OfficialDashboard: React.FC = () => {
 
 			<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500" data-testid="stat-total">
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-sm font-medium text-gray-600 uppercase">
 									Total Issues
 								</p>
-								<p className="text-3xl font-bold text-gray-900 mt-2">
+								<p className="text-3xl font-bold text-gray-900 mt-2" data-testid="stat-total-count">
 									{stats.total}
 								</p>
 							</div>
 						</div>
 					</div>
 
-					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500" data-testid="stat-new">
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-sm font-medium text-gray-600 uppercase">
 									New
 								</p>
-								<p className="text-3xl font-bold text-gray-900 mt-2">
+								<p className="text-3xl font-bold text-gray-900 mt-2" data-testid="stat-new-count">
 									{stats.new}
 								</p>
 							</div>
 						</div>
 					</div>
 
-					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500" data-testid="stat-in-progress">
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-sm font-medium text-gray-600 uppercase">
 									In Progress
 								</p>
-								<p className="text-3xl font-bold text-gray-900 mt-2">
+								<p className="text-3xl font-bold text-gray-900 mt-2" data-testid="stat-in-progress-count">
 									{stats.inProgress}
 								</p>
 							</div>
 						</div>
 					</div>
 
-					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+					<div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500" data-testid="stat-resolved">
 						<div className="flex items-center justify-between">
 							<div>
 								<p className="text-sm font-medium text-gray-600 uppercase">
 									Resolved
 								</p>
-								<p className="text-3xl font-bold text-gray-900 mt-2">
+								<p className="text-3xl font-bold text-gray-900 mt-2" data-testid="stat-resolved-count">
 									{stats.resolved}
 								</p>
 							</div>
@@ -232,6 +234,7 @@ const OfficialDashboard: React.FC = () => {
 						</label>
 						<select
 							id="statusFilter"
+							data-testid="status-filter"
 							value={statusFilter}
 							onChange={(e) =>
 								setStatusFilter(e.target.value as IssueStatus | "all")
@@ -247,7 +250,7 @@ const OfficialDashboard: React.FC = () => {
 				</div>
 
 				{filteredIssues.length === 0 ? (
-					<div className="bg-white rounded-b-lg shadow-md p-12 text-center">
+					<div className="bg-white rounded-b-lg shadow-md p-12 text-center" data-testid="no-issues-message">
 						<h3 className="text-xl font-semibold text-gray-700 mb-2">
 							No Issues Found
 						</h3>
@@ -258,7 +261,7 @@ const OfficialDashboard: React.FC = () => {
 						</p>
 					</div>
 				) : (
-					<div className="space-y-3">
+					<div className="space-y-3" data-testid="issues-list">
 						{filteredIssues.map((issue: Issue) => (
 							<OfficialIssueCard
 								key={issue.id}

@@ -89,12 +89,12 @@ const CommentForm = ({ issueId }: CommentFormProps) => {
 			)}
 			{!user && (
 				<div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-					<p className="text-sm text-yellow-800">
+					<p className="text-sm text-yellow-800" data-testid="anonymous-login-prompt">
 						Please log in to add a comment.
 					</p>
 				</div>
 			)}
-			<form onSubmit={handleSubmit} className="space-y-4">
+			<form onSubmit={handleSubmit} className="space-y-4" data-testid="comment-form">
 				<div>
 					<textarea
 						id="comment"
@@ -104,6 +104,7 @@ const CommentForm = ({ issueId }: CommentFormProps) => {
 						placeholder="Add your comment or update about this issue..."
 						className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
 						disabled={isSubmitting}
+						data-testid="comment-textarea"
 					/>
 				</div>
 
@@ -112,6 +113,7 @@ const CommentForm = ({ issueId }: CommentFormProps) => {
 						type="submit"
 						disabled={!commentText.trim() || isSubmitting || !user}
 						className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+						data-testid="comment-submit-button"
 					>
 						{isSubmitting ? (
 							<>

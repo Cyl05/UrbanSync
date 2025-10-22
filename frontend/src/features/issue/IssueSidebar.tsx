@@ -25,7 +25,7 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 	const { user } = useAuth();
 
 	return (
-		<div className="space-y-6 col-span-2">
+		<div className="space-y-6 col-span-2" data-testid="issue-sidebar">
 			<div className="bg-white rounded-lg shadow-sm p-6">
 				<h2 className="text-lg font-semibold text-gray-900 mb-4">
 					Issue Details
@@ -37,7 +37,7 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 								<FaExclamationCircle />
 								<span>Category</span>
 							</div>
-							<p className="text-gray-900 font-medium">
+							<p className="text-gray-900 font-medium" data-testid="issue-category">
 								{IssueCategoryLabels[issue.issue_type] ||
 									issue.issue_type}
 							</p>
@@ -50,7 +50,7 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 								<FaUser />
 								<span>Reported By</span>
 							</div>
-							<p className="text-gray-900 font-medium">
+							<p className="text-gray-900 font-medium" data-testid="issue-reporter">
 								{issue.userByCreatedBy.name}
 							</p>
 						</div>
@@ -62,7 +62,7 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 								<FaBuilding />
 								<span>Assigned Department</span>
 							</div>
-							<p className="text-gray-900 font-medium">
+							<p className="text-gray-900 font-medium" data-testid="issue-assigned-department">
 								{issue.department.name}
 							</p>
 							{issue.department.description && (
@@ -73,33 +73,18 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 						</div>
 					)}
 
-					{issue.user && (
-						<div>
-							<div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
-								<FaUser />
-								<span>Reported By:</span>
-							</div>
-							<p className="text-gray-900 font-medium">
-								{issue.user.name}
-							</p>
-							<p className="text-gray-600 text-sm">
-								{issue.user.email}
-							</p>
-						</div>
-					)}
-
 					<div>
 						<div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
 							<FaClock />
 							<span>Created</span>
 						</div>
-						<p className="text-gray-900 text-sm">
+						<p className="text-gray-900 text-sm" data-testid="issue-created-date">
 							{formatDate(issue.created_at)}
 						</p>
 					</div>
 
 					<div>
-						<div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
+						<div className="flex items-center gap-2 text-gray-500 text-sm mb-1" data-testid="issue-updated-date">
 							<FaClock />
 							<span>Last Updated</span>
 						</div>

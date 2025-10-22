@@ -23,6 +23,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 						onError={(e) => {
 							e.currentTarget.style.display = "none";
 						}}
+						data-testid='issue-photo'
 					/>
 				</div>
 			)}
@@ -31,7 +32,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 				<h2 className="text-xl font-semibold text-gray-900 mb-4">
 					Description
 				</h2>
-				<p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+				<p className="text-gray-700 leading-relaxed whitespace-pre-wrap" data-testid="issue-description-text">
 					{issue.description || "No description provided."}
 				</p>
 			</div>
@@ -44,13 +45,13 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 					<div className="grid grid-cols-2 gap-4 text-sm">
 						<div>
 							<span className="text-gray-500">Latitude:</span>
-							<p className="font-medium text-gray-900">
+							<p className="font-medium text-gray-900" data-testid="issue-latitude">
 								{issue.latitude.toFixed(6)}
 							</p>
 						</div>
 						<div>
 							<span className="text-gray-500">Longitude:</span>
-							<p className="font-medium text-gray-900">
+							<p className="font-medium text-gray-900" data-testid="issue-longitude">
 								{issue.longitude.toFixed(6)}
 							</p>
 						</div>
@@ -60,7 +61,6 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 							title="Issue Location"
 							width="100%"
 							height="100%"
-							frameBorder="0"
 							src={`https://www.openstreetmap.org/export/embed.html?bbox=${
 								issue.longitude - 0.005
 							},${issue.latitude - 0.005},${
@@ -74,7 +74,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 			</div>
 
 			{issue.comments && issue.comments.length > 0 && (
-				<div className="bg-white rounded-lg shadow-sm p-6">
+				<div className="bg-white rounded-lg shadow-sm p-6" data-testid="issue-comments-section">
 					<h2 className="text-xl font-semibold text-gray-900 mb-4">
 						Comments
 					</h2>
@@ -83,6 +83,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 							<div
 								key={comment.id}
 								className="bg-indigo-100 px-5 py-2 rounded-t-md rounded-r-md border-l-4 border-indigo-500"
+								data-testid="comment-item"
 							>
 								<div className="flex items-center justify-between mb-2 border-b-2 border-gray-400">
 									<div className="flex items-center gap-2 mb-1">
@@ -91,7 +92,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 											className="w-6 rounded-full" 
 											alt={comment.user?.name || "User avatar"}
 										/>
-										<strong>{comment.user?.name ||
+										<strong data-testid="comment-author">{comment.user?.name ||
 											"Unknown User"}
 										</strong>
 										{comment.user?.role && (
@@ -100,11 +101,11 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 											</span>
 										)}
 									</div>
-									<span className="text-sm text-gray-500">
+									<span className="text-sm text-gray-500" data-testid="comment-timestamp">
 										{formatDate(comment.created_at)}
 									</span>
 								</div>
-								<p className="text-gray-700 whitespace-pre-wrap">
+								<p className="text-gray-700 whitespace-pre-wrap" data-testid="comment-content">
 									{comment.content}
 								</p>
 							</div>
@@ -118,7 +119,7 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 			/>
 
 			{issue.attachments && issue.attachments.length > 0 && (
-				<div className="bg-white rounded-lg shadow-sm p-6">
+				<div className="bg-white rounded-lg shadow-sm p-6" data-testid="attachments-section">
 					<h2 className="text-xl font-semibold text-gray-900 mb-4">
 						Attachments
 					</h2>

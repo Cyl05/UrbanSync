@@ -306,6 +306,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 											? "bg-indigo-600 text-white"
 											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 									}`}
+									data-testid="search-address-mode"
 								>
 									Search Address
 								</button>
@@ -317,6 +318,7 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 											? "bg-indigo-600 text-white"
 											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 									}`}
+									data-testid="pin-on-map-mode"
 								>
 									<span>Pin on Map</span>
 								</button>
@@ -341,18 +343,21 @@ const NewIssueSidebar: React.FC<NewIssueSidebarProps> = ({
 									</GeoapifyContext>
 								</div>
 							) : (
-								<div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+								<div 
+									className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2"
+									data-testid="pin-mode-coordinates"
+								>
 									<p className="text-sm text-blue-800 font-medium">
 										Pan the map to position the marker
 									</p>
 									<div className="text-xs text-gray-600 space-y-1">
 										<div className="flex justify-between">
 											<span className="font-medium">Latitude:</span>
-											<span className="font-mono">{mapCenterCoords.latitude.toFixed(6)}</span>
+											<span className="font-mono" data-testid="latitude-display">{mapCenterCoords.latitude.toFixed(6)}</span>
 										</div>
 										<div className="flex justify-between">
 											<span className="font-medium">Longitude:</span>
-											<span className="font-mono">{mapCenterCoords.longitude.toFixed(6)}</span>
+											<span className="font-mono" data-testid="longitude-display">{mapCenterCoords.longitude.toFixed(6)}</span>
 										</div>
 									</div>
 								</div>

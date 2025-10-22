@@ -150,7 +150,6 @@ const Map = () => {
 					scrollWheelZoom={true}
 					zoomControl={false}
 					className="cursor-pointer"
-		            data-testid="main-map"
 				>
 					<RecenterMap
 						latitude={centerCoords.latitude}

@@ -2,7 +2,10 @@ import React from "react";
 
 const CenterMarker: React.FC = () => {
 	return (
-		<div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[999] pointer-events-none">
+		<div 
+			className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[999] pointer-events-none"
+			data-testid="center-marker"
+		>
 				<img
 					width="60"
 					height="60"

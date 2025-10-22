@@ -10,9 +10,7 @@ describe('Create Issue via Address Search', () => {
         cy.getByTestId('submit-button').click();
         cy.url().should('not.include', '/login');
         
-        // Wait for authentication to complete and page to fully load
         cy.wait(1000);
-        // Verify user is authenticated by checking for profile button
         cy.getByTestId('profile-button').should('be.visible');
     });
 
@@ -34,11 +32,9 @@ describe('Create Issue via Address Search', () => {
 
         cy.getByTestId('submit-issue').click();
 
-        // cy.getByTestId('close-sidebar').click();
-        // cy.getByTestId('profile-button').click();
+        cy.url().should('match', /\/issue\/[a-f0-9-]+$/, { timeout: 10000 });
 
-        // cy.reload();
-
-        // cy.contains('Pothole on Main Street').should('be.visible');
+        cy.contains('Pothole on Main Street').should('be.visible');
+        cy.contains('Large pothole near the intersection.');
     });
 });

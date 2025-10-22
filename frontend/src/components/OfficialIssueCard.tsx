@@ -31,11 +31,12 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({
 			key={issue.id}
 			onClick={() => navigate(`/issue/${issue.id}`)}
 			className="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors"
+			data-testid="issue-card"
 		>
 			<div className="flex items-start justify-between">
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center space-x-3 mb-2">
-						<h3 className="text-lg font-semibold text-gray-900 truncate">
+						<h3 className="text-lg font-semibold text-gray-900 truncate" data-testid="issue-title">
 							{issue.title}
 						</h3>
 						<IssueStatusBadge status={issue.status} />
@@ -45,6 +46,7 @@ export const OfficialIssueCard: React.FC<OfficialIssueCardProps> = ({
 								onChange={handleStatusChange}
 								onClick={(e) => e.stopPropagation()}
 								className="ml-2 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								data-testid="status-dropdown"
 							>
 								<option value="new">New</option>
 								<option value="in_progress">In Progress</option>

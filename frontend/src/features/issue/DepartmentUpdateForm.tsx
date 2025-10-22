@@ -80,16 +80,16 @@ const DepartmentUpdateForm = ({ issueId }: DepartmentUpdateFormProps) => {
 	};
 
 	return (
-		<div className="bg-white rounded-lg shadow-sm p-6">
+		<div className="bg-white rounded-lg shadow-sm p-6" data-testid="department-update-form">
 			<h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
 				Post Department Update
 			</h2>
 			{error && (
-				<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+				<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg" data-testid="error-message">
 					<p className="text-sm text-red-600">{error}</p>
 				</div>
 			)}
-			<form onSubmit={handleSubmit} className="space-y-4">
+			<form onSubmit={handleSubmit} className="space-y-4" data-testid="update-form">
 				<div>
 					<textarea
 						id="department-update"
@@ -99,6 +99,7 @@ const DepartmentUpdateForm = ({ issueId }: DepartmentUpdateFormProps) => {
 						placeholder="Provide an official update about this issue"
 						className="w-full px-4 py-3 border border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none focus:outline-none"
 						disabled={isSubmitting}
+						data-testid="update-textarea"
 					/>
 					<p className="text-xs text-gray-500 mt-1">
 						This update will be publicly visible and marked as an
@@ -111,6 +112,7 @@ const DepartmentUpdateForm = ({ issueId }: DepartmentUpdateFormProps) => {
 						type="submit"
 						disabled={!updateText.trim() || isSubmitting}
 						className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-medium"
+						data-testid="submit-update-button"
 					>
 						{isSubmitting ? (
 							<>

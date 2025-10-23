@@ -96,7 +96,10 @@ const IssueMainContent: React.FC<IssueMainContentProps> = ({ issue, formatDate }
 											"Unknown User"}
 										</strong>
 										{comment.user?.role && (
-											<span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+											<span
+												className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded" 
+												data-testid="comment-author-role"
+											>
 												{comment.user.role}
 											</span>
 										)}

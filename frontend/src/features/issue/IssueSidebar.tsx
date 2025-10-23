@@ -44,14 +44,17 @@ const IssueSidebar = ({ issue, formatDate }: IssueSidebarProps) => {
 						</div>
 					)}
 
-					{issue.userByCreatedBy && (
+					{issue.user && (
 						<div>
 							<div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
 								<FaUser />
-								<span>Reported By</span>
+								<span>Reported By:</span>
 							</div>
-							<p className="text-gray-900 font-medium" data-testid="issue-reporter">
-								{issue.userByCreatedBy.name}
+							<p className="text-gray-900 font-medium">
+								{issue.user.name}
+							</p>
+							<p className="text-gray-600 text-sm">
+								{issue.user.email}
 							</p>
 						</div>
 					)}

@@ -27,6 +27,7 @@ const SignOut: React.FC = () => {
 		<button
 			onClick={handleSignOut}
 			className="flex items-center space-x-2 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
+			data-testid="sign-out-button"
 		>
 			<FaSignOutAlt />
 			<span className="hidden sm:inline">Sign Out</span>

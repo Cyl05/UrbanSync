@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { gql } from "@apollo/client";
 import { useMutation } from '@apollo/client/react';
 import { formatDate } from "../../utils/formatDate";
-import { FaUser, FaEnvelope, FaCalendarAlt, FaBuilding, FaEdit, FaSave, FaTimes } from "react-icons/fa";
+import { FaEnvelope, FaCalendarAlt, FaBuilding, FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import type { User } from "../../types/schema";
 
 const UPDATE_USER_PROFILE = gql`
@@ -88,6 +88,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 							onClick={() => setEditMode(true)}
 							className="text-gray-500 text-xl cursor-pointer hover:text-indigo-600 transition-colors absolute top-0 right-0"
 							title="Edit Profile"
+							data-testid="edit-button"
 						/>
 					) : (
 						<div className="absolute top-0 right-0 flex space-x-2">
@@ -96,6 +97,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 								disabled={saving}
 								className="text-white hover:text-gray-200 transition-colors duration-200 disabled:opacity-50 bg-green-700 hover:bg-green-800 cursor-pointer p-2 rounded-md"
 								title="Save Changes"
+								data-testid="edit-profile-save"
 							>
 								<FaSave className="text-xl" />
 							</button>
@@ -104,6 +106,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 								disabled={saving}
 								className="text-white hover:text-gray-200 transition-colors duration-200 disabled:opacity-50 bg-red-700 hover:bg-red-800 cursor-pointer p-2 rounded-md"
 								title="Cancel"
+								data-testid="edit-profile-cancel"
 							>
 								<FaTimes className="text-xl" />
 							</button>
@@ -113,20 +116,16 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 					{inEditMode ? (
 						<div className="space-y-4">
 							<div>
-								{editedProfilePicture ? (
-									<img
-										src={editedProfilePicture}
-										alt="Profile preview"
-										className="w-24 h-24 rounded-full object-cover mx-auto mb-2"
-										onError={(e) => {
-											e.currentTarget.style.display = 'none';
-											e.currentTarget.nextElementSibling?.classList.remove('hidden');
-										}}
-									/>
-								) : null}
-								<div className={`w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-2 ${editedProfilePicture ? 'hidden' : ''}`}>
-									<FaUser className="text-indigo-600 text-4xl" />
-								</div>
+								<img
+									src={editedProfilePicture ? editedProfilePicture : 'https://i.ibb.co/prXdx3gx/image.png'}
+									alt="Profile preview"
+									className="w-24 h-24 rounded-full object-cover mx-auto mb-2"
+									onError={(e) => {
+										e.currentTarget.style.display = 'none';
+										e.currentTarget.nextElementSibling?.classList.remove('hidden');
+									}}
+									data-testid="edit-user-photo"
+								/>
 								<div className="max-w-sm mx-auto">
 									<label htmlFor="profile-picture-url" className="block text-sm font-medium text-gray-700 mb-1">
 										Profile Picture URL
@@ -138,6 +137,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 										onChange={(e) => setEditedProfilePicture(e.target.value)}
 										placeholder="https://example.com/photo.jpg"
 										className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+										data-testid="edit-profile-photo"
 									/>
 								</div>
 							</div>
@@ -152,6 +152,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 									value={editedName}
 									onChange={(e) => setEditedName(e.target.value)}
 									className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+									data-testid="edit-profile-name"
 								/>
 							</div>
 
@@ -163,21 +164,22 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 						</div>
 					) : (
 						<>
-							{user?.profile_picture ? (
-								<img
-									src={user.profile_picture}
-									alt={user.name}
-									className="w-24 h-24 rounded-full object-cover mx-auto mb-4"
-									onError={(e) => {
-										e.currentTarget.style.display = 'none';
-										e.currentTarget.nextElementSibling?.classList.remove('hidden');
-									}}
-								/>
-							) : null}
-							<div className={`w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 ${user?.profile_picture ? 'hidden' : ''}`}>
-								<FaUser className="text-indigo-600 text-4xl" />
-							</div>
-							<h2 className="text-2xl font-bold text-gray-900">
+							<img
+								src={
+									user?.profile_picture ? 
+									user.profile_picture : 
+									'https://i.ibb.co/prXdx3gx/image.png'
+								}
+								alt={user.name}
+								className="w-24 h-24 rounded-full object-cover mx-auto mb-4"
+								onError={(e) => {
+									e.currentTarget.style.display = 'none';
+									e.currentTarget.nextElementSibling?.classList.remove('hidden');
+								}}
+								data-testid="user-photo"
+							/>
+							
+							<h2 className="text-2xl font-bold text-gray-900" data-testid="user-name">
 								{user.name}
 							</h2>
 						</>
@@ -191,6 +193,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 								? "bg-blue-100 text-blue-800"
 								: "bg-green-100 text-green-800"
 						}`}
+						data-testid="user-role"
 					>
 						{user.role.charAt(0).toUpperCase() + user.role.slice(1)}
 					</span>
@@ -201,7 +204,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 						<FaEnvelope className="text-gray-400 mt-1" />
 						<div>
 							<p className="text-sm text-gray-500">Email</p>
-							<p className="text-gray-900">{user.email}</p>
+							<p className="text-gray-900" data-testid="user-email">{user.email}</p>
 						</div>
 					</div>
 
@@ -211,7 +214,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 							<p className="text-sm text-gray-500">
 								Member Since
 							</p>
-							<p className="text-gray-900">
+							<p className="text-gray-900" data-testid="user-created-at">
 								{formatDate(user.created_at)}
 							</p>
 						</div>
@@ -224,11 +227,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 								<p className="text-sm text-gray-500">
 									Department
 								</p>
-								<p className="text-gray-900 font-medium">
+								<p className="text-gray-900 font-medium" data-testid="department-name">
 									{user.department.name}
 								</p>
 								{user.department.description && (
-									<p className="text-sm text-gray-600 mt-1">
+									<p className="text-sm text-gray-600 mt-1" data-testid="department-description">
 										{user.department.description}
 									</p>
 								)}
@@ -243,7 +246,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 					</h3>
 					<div className="grid grid-cols-2 gap-4">
 						<div className="text-center">
-							<p className="text-2xl font-bold text-gray-900">
+							<p className="text-2xl font-bold text-gray-900" data-testid="user-total-issues">
 								{stats.total}
 							</p>
 							<p className="text-sm text-gray-500">
@@ -251,7 +254,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ stats, user }) => {
 							</p>
 						</div>
 						<div className="text-center">
-							<p className="text-2xl font-bold text-green-600">
+							<p className="text-2xl font-bold text-green-600" data-testid="user-total-resolved">
 								{stats.resolved}
 							</p>
 							<p className="text-sm text-gray-500">Resolved</p>

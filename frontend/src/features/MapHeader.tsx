@@ -62,7 +62,7 @@ const MapHeader: React.FC<MapHeaderProps> = ({
 						<Link
 							to="/profile"
 							className="bg-white/90 backdrop-blur-sm hover:bg-white transition-colors duration-200 text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium"
-							data-testid={'profile-button'}
+							data-testid="profile-button"
 						>
 							<FaUser />
 							<span>Profile</span>

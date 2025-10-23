@@ -22,22 +22,24 @@ export const IssueCard = ({ issue }: IssueCardProps) => {
 						src={issue.photo_url}
 						alt="Issue preview"
 						className="w-full h-full object-cover"
+						data-testid="mini-issue-image"
 					/>
 				</div>
 			}
 
 			<div className="p-6">
-				<h3 className="text-xl font-bold text-gray-800 mb-3 hover:text-emerald-700 transition-colors">
+				<h3 className="text-xl font-bold text-gray-800 mb-3 hover:text-emerald-700 transition-colors" data-testid="mini-issue-title">
 					{issue.title}
 				</h3>
 
-				<p className="text-gray-600 text-sm leading-relaxed mb-5">
+				<p className="text-gray-600 text-sm leading-relaxed mb-5" data-testid="mini-issue-description">
 					{issue.description}
 				</p>
 
 				<button 
 					onClick={handleViewIssue}
 					className="group w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md cursor-pointer"
+					data-testid="issue-view-button"
 				>
 					<span>View Issue</span>
                     <FaArrowUpRightFromSquare />

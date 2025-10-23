@@ -120,7 +120,6 @@ describe('Department Status Updates', () => {
 			const total = parseInt(totalText);
 			
 			if (total > 0) {
-				// Select a status without clicking first
 				cy.getByTestId('status-dropdown').first().select('in_progress');
 				
 				cy.url().should('include', '/dashboard');
